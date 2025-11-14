@@ -1,0 +1,15 @@
+# ninja log v6
+51	89	7848526003355836	CMakeFiles/clean.additional	baedbe210acaa455
+89	99	7848526003739520	clean	577b940aee94fbd7
+25	1219	7848526144136324	InterfaceAvaliacoes_autogen/timestamp	ae0b363214521ca4
+25	1219	7848526144136324	InterfaceAvaliacoes_autogen/mocs_compilation.cpp	ae0b363214521ca4
+25	1219	7848526144136324	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/timestamp	ae0b363214521ca4
+25	1219	7848526144136324	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/mocs_compilation.cpp	ae0b363214521ca4
+1221	4983	7848526145171852	CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/mocs_compilation.cpp.obj	996fb0ca97e58eab
+1236	4998	7848526145311787	CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogologin.cpp.obj	33e8c50f6d2635d3
+1227	5013	7848526145221839	CMakeFiles/InterfaceAvaliacoes.dir/main.cpp.obj	e2a6ff6cfe02e4e8
+1232	5208	7848526145271826	CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/janelaprincipal.cpp.obj	a27d4000ecdae301
+1245	5892	7848526145401823	CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaavaliadores.cpp.obj	4affe4955b8a136a
+1249	6659	7848526145451771	CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginanotas.cpp.obj	efe5e0b276c0788
+1241	6701	7848526145361783	CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaprojetos.cpp.obj	4f2d675b329bc27
+6702	7477	7848526199972874	InterfaceAvaliacoes.exe	38b534fd862b4736
