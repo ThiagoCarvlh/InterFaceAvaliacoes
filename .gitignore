@@ -1,0 +1,21 @@
+﻿# Arquivos de sistema
+Thumbs.db
+.DS_Store
+
+# Arquivos de IDE
+.vscode/
+.idea/
+
+# Arquivos de cache
+__pycache__/
+*.pyc
+
+# Arquivos de ambiente
+.env
+.venv
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
