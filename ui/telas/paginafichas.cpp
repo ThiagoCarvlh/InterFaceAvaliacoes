@@ -111,10 +111,287 @@ bool resolucaoValida(const QString& r) {
     return !r.trimmed().isEmpty();
 }
 
+// ===== DIÁLOGO PARA ADICIONAR/EDITAR QUESITO =====
+bool abrirDialogoQuesito(QWidget* parent, Quesito& quesito, bool edicao)
+{
+    QDialog dlg(parent);
+    dlg.setWindowTitle(edicao ? "️ Editar Quesito" : " Novo Quesito");
+    dlg.setModal(true);
+    dlg.setMinimumSize(600, 400);
+    dlg.setStyleSheet(parent->styleSheet());
+
+    auto* layout = new QVBoxLayout(&dlg);
+    layout->setSpacing(20);
+    layout->setContentsMargins(30, 30, 30, 30);
+
+    // Título
+    auto* titulo = new QLabel(edicao ? "️ Editar Quesito de Avaliação" : " Novo Quesito", &dlg);
+    titulo->setObjectName("labelTitulo");
+    titulo->setStyleSheet("color: #00D4FF; font-size: 18px; font-weight: bold; padding: 8px 0;");
+    layout->addWidget(titulo);
+
+    // GroupBox principal
+    auto* box = new QGroupBox(" Dados do Quesito", &dlg);
+    auto* formLayout = new QFormLayout(box);
+    formLayout->setSpacing(15);
+    formLayout->setContentsMargins(20, 25, 20, 20);
+
+    // Nome do quesito
+    auto* edNome = new QLineEdit(quesito.nome, &dlg);
+    edNome->setPlaceholderText("Ex: Clareza na apresentação");
+    formLayout->addRow("Nome do Quesito: *", edNome);
+
+    // Auto-calculado
+    auto* chkAuto = new QCheckBox("Este quesito é calculado automaticamente", &dlg);
+    chkAuto->setChecked(quesito.autoCalculado);
+    formLayout->addRow("", chkAuto);
+
+    // Tem peso
+    auto* chkPeso = new QCheckBox("Aplicar peso ao quesito", &dlg);
+    chkPeso->setChecked(quesito.temPeso);
+
+    auto* spnPeso = new QDoubleSpinBox(&dlg);
+    spnPeso->setRange(0.1, 10.0);
+    spnPeso->setSingleStep(0.1);
+    spnPeso->setDecimals(1);
+    spnPeso->setValue(quesito.peso);
+    spnPeso->setEnabled(quesito.temPeso);
+
+    auto* layoutPeso = new QHBoxLayout();
+    layoutPeso->addWidget(chkPeso);
+    layoutPeso->addWidget(new QLabel("Valor:", &dlg));
+    layoutPeso->addWidget(spnPeso);
+    layoutPeso->addStretch();
+    formLayout->addRow("Peso:", layoutPeso);
+
+    // Conecta checkbox de peso
+    QObject::connect(chkPeso, &QCheckBox::toggled, spnPeso, &QDoubleSpinBox::setEnabled);
+
+    layout->addWidget(box);
+    layout->addStretch();
+
+    // Botões
+    auto* btnLayout = new QHBoxLayout();
+    auto* btnCancel = new QPushButton("Cancelar", &dlg);
+    auto* btnSave = new QPushButton(edicao ? " Salvar" : " Adicionar", &dlg);
+
+    btnCancel->setObjectName("btnCancel");
+    btnLayout->addStretch();
+    btnLayout->addWidget(btnCancel);
+    btnLayout->addWidget(btnSave);
+    layout->addLayout(btnLayout);
+
+    // Conexões
+    QObject::connect(btnCancel, &QPushButton::clicked, &dlg, &QDialog::reject);
+    QObject::connect(btnSave, &QPushButton::clicked, &dlg, &QDialog::accept);
+
+    // Validação
+    auto validar = [&]() {
+        bool ok = !edNome->text().trimmed().isEmpty();
+        btnSave->setEnabled(ok);
+    };
+    QObject::connect(edNome, &QLineEdit::textChanged, &dlg, validar);
+    validar();
+
+    if (dlg.exec() == QDialog::Accepted) {
+        quesito.nome = edNome->text().trimmed();
+        quesito.autoCalculado = chkAuto->isChecked();
+        quesito.temPeso = chkPeso->isChecked();
+        quesito.peso = spnPeso->value();
+        return true;
+    }
+    return false;
+}
+
+// ===== DIÁLOGO PARA ADICIONAR/EDITAR SEÇÃO =====
+bool abrirDialogoSecao(QWidget* parent, Secao& secao, bool edicao)
+{
+    QDialog dlg(parent);
+    dlg.setWindowTitle(edicao ? "️ Editar Seção" : " Nova Seção");
+    dlg.setModal(true);
+    dlg.setMinimumSize(750, 650);
+    dlg.setStyleSheet(parent->styleSheet());
+
+    auto* mainLayout = new QVBoxLayout(&dlg);
+    mainLayout->setSpacing(20);
+    mainLayout->setContentsMargins(30, 30, 30, 30);
+
+    // Título
+    auto* titulo = new QLabel(edicao ? "️ Editar Seção de Avaliação" : " Nova Seção de Avaliação", &dlg);
+    titulo->setObjectName("labelTitulo");
+    titulo->setStyleSheet("color: #00D4FF; font-size: 18px; font-weight: bold; padding: 8px 0;");
+    mainLayout->addWidget(titulo);
+
+    // ===== IDENTIFICAÇÃO DA SEÇÃO =====
+    auto* boxId = new QGroupBox(" Identificação da Seção", &dlg);
+    auto* formId = new QFormLayout(boxId);
+    formId->setSpacing(12);
+    formId->setContentsMargins(20, 25, 20, 20);
+
+    auto* edIdentificador = new QLineEdit(secao.identificador, &dlg);
+    auto* edTitulo = new QLineEdit(secao.titulo, &dlg);
+
+    edIdentificador->setPlaceholderText("Ex: A, B, 1, 2...");
+    edTitulo->setPlaceholderText("Ex: Apresentação, Conteúdo...");
+
+    formId->addRow("Identificador: *", edIdentificador);
+    formId->addRow("Título da Seção: *", edTitulo);
+
+    mainLayout->addWidget(boxId);
+
+    // ===== QUESITOS =====
+    auto* boxQuesitos = new QGroupBox(" Quesitos de Avaliação", &dlg);
+    auto* layQuesitos = new QVBoxLayout(boxQuesitos);
+    layQuesitos->setSpacing(12);
+    layQuesitos->setContentsMargins(20, 25, 20, 20);
+
+    auto* listQuesitos = new QListWidget(&dlg);
+    listQuesitos->setMinimumHeight(200);
+
+    // Popula lista de quesitos
+    for (const auto& q : secao.quesitos) {
+        QString texto = q.nome;
+
+        if (q.autoCalculado) {
+            texto += " [AUTO-CALCULADO]";
+        }
+
+        if (q.temPeso && q.peso != 1.0) {
+            texto += QString(" (Peso: %1)").arg(q.peso, 0, 'f', 1);
+        }
+
+        listQuesitos->addItem(texto);
+    }
+
+    auto* btnAddQuesito = new QPushButton(" Adicionar Quesito", &dlg);
+    auto* btnEditQuesito = new QPushButton("️ Editar Quesito", &dlg);
+    auto* btnRemQuesito = new QPushButton("️ Remover Quesito", &dlg);
+    btnRemQuesito->setObjectName("btnDanger");
+
+    auto* layoutBtnQuesitos = new QHBoxLayout();
+    layoutBtnQuesitos->setSpacing(10);
+    layoutBtnQuesitos->addWidget(btnAddQuesito);
+    layoutBtnQuesitos->addWidget(btnEditQuesito);
+    layoutBtnQuesitos->addWidget(btnRemQuesito);
+    layoutBtnQuesitos->addStretch();
+
+    layQuesitos->addWidget(listQuesitos);
+    layQuesitos->addLayout(layoutBtnQuesitos);
+
+    mainLayout->addWidget(boxQuesitos);
+    mainLayout->addStretch();
+
+    // ===== BOTÕES FINAIS =====
+    auto* btnLayout = new QHBoxLayout();
+    auto* btnCancel = new QPushButton("Cancelar", &dlg);
+    auto* btnSave = new QPushButton(edicao ? " Salvar" : " Criar Seção", &dlg);
+
+    btnCancel->setObjectName("btnCancel");
+    btnLayout->addStretch();
+    btnLayout->addWidget(btnCancel);
+    btnLayout->addWidget(btnSave);
+    mainLayout->addLayout(btnLayout);
+
+    // ===== CONEXÕES - QUESITOS =====
+
+    // Adicionar quesito
+    QObject::connect(btnAddQuesito, &QPushButton::clicked, &dlg, [&]() {
+        Quesito novoQ;
+        novoQ.peso = 1.0;
+
+        if (abrirDialogoQuesito(&dlg, novoQ, false)) {
+            secao.quesitos.append(novoQ);
+
+            QString texto = novoQ.nome;
+            if (novoQ.autoCalculado) texto += " [AUTO-CALCULADO]";
+            if (novoQ.temPeso && novoQ.peso != 1.0) {
+                texto += QString(" (Peso: %1)").arg(novoQ.peso, 0, 'f', 1);
+            }
+
+            listQuesitos->addItem(texto);
+        }
+    });
+
+    // Editar quesito
+    QObject::connect(btnEditQuesito, &QPushButton::clicked, &dlg, [&]() {
+        int row = listQuesitos->currentRow();
+        if (row < 0) {
+            QMessageBox::information(&dlg, "Editar Quesito",
+                                     "Selecione um quesito para editar.");
+            return;
+        }
+
+        if (row >= secao.quesitos.size()) return;
+
+        Quesito& q = secao.quesitos[row];
+
+        if (abrirDialogoQuesito(&dlg, q, true)) {
+            QString texto = q.nome;
+            if (q.autoCalculado) texto += " [AUTO-CALCULADO]";
+            if (q.temPeso && q.peso != 1.0) {
+                texto += QString(" (Peso: %1)").arg(q.peso, 0, 'f', 1);
+            }
+
+            listQuesitos->item(row)->setText(texto);
+        }
+    });
+
+    // Remover quesito
+    QObject::connect(btnRemQuesito, &QPushButton::clicked, &dlg, [&]() {
+        int row = listQuesitos->currentRow();
+        if (row < 0) {
+            QMessageBox::information(&dlg, "Remover Quesito",
+                                     "Selecione um quesito para remover.");
+            return;
+        }
+
+        if (row >= secao.quesitos.size()) return;
+
+        auto resposta = QMessageBox::question(
+            &dlg,
+            "Confirmar Remoção",
+            QString("Deseja remover o quesito '%1'?")
+                .arg(secao.quesitos[row].nome),
+            QMessageBox::Yes | QMessageBox::No
+            );
+
+        if (resposta == QMessageBox::Yes) {
+            secao.quesitos.remove(row);
+            delete listQuesitos->takeItem(row);
+        }
+    });
+
+    // Duplo clique edita
+    QObject::connect(listQuesitos, &QListWidget::doubleClicked,
+                     btnEditQuesito, &QPushButton::click);
+
+    // ===== CONEXÕES - DIÁLOGO =====
+    QObject::connect(btnCancel, &QPushButton::clicked, &dlg, &QDialog::reject);
+    QObject::connect(btnSave, &QPushButton::clicked, &dlg, &QDialog::accept);
+
+    // Validação
+    auto validar = [&]() {
+        bool ok = !edIdentificador->text().trimmed().isEmpty() &&
+                  !edTitulo->text().trimmed().isEmpty();
+        btnSave->setEnabled(ok);
+    };
+
+    QObject::connect(edIdentificador, &QLineEdit::textChanged, &dlg, validar);
+    QObject::connect(edTitulo, &QLineEdit::textChanged, &dlg, validar);
+    validar();
+
+    // Executa diálogo
+    if (dlg.exec() == QDialog::Accepted) {
+        secao.identificador = edIdentificador->text().trimmed();
+        secao.titulo = edTitulo->text().trimmed();
+        return true;
+    }
+
+    return false;
+}
+
 // ===== DIÁLOGO PRINCIPAL - CRIAR/EDITAR FICHA =====
 
-
-// ← ADICIONAR AQUI
 static void preencherCategorias(QComboBox* combo, bool tecnico) {
     combo->clear();
     if (tecnico) {
@@ -315,7 +592,7 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
     mainLayout->setContentsMargins(30, 30, 30, 30);
 
     // ===== TÍTULO PRINCIPAL =====
-    auto* titulo = new QLabel(edicao ? "✏️ Editar Ficha de Avaliação" : "➕ Nova Ficha de Avaliação", &dlg);
+    auto* titulo = new QLabel(edicao ? "️ Editar Ficha de Avaliação" : " Nova Ficha de Avaliação", &dlg);
     titulo->setObjectName("labelTitulo");
     mainLayout->addWidget(titulo);
 
@@ -331,7 +608,7 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
     scrollLayout->setContentsMargins(0, 0, 10, 0);  // margem direita para scrollbar
 
     // ===== IDENTIFICAÇÃO =====
-    auto* boxId = new QGroupBox("📋 Identificação da Ficha", scrollContent);
+    auto* boxId = new QGroupBox(" Identificação da Ficha", scrollContent);
     auto* formId = new QFormLayout(boxId);
     formId->setSpacing(12);
     formId->setContentsMargins(20, 25, 20, 20);
@@ -419,7 +696,7 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
     scrollLayout->addWidget(boxId);
 
     // ===== SEÇÕES =====
-    auto* boxSecoes = new QGroupBox("📝 Seções de Avaliação", scrollContent);
+    auto* boxSecoes = new QGroupBox(" Seções de Avaliação", scrollContent);
     auto* laySecoes = new QVBoxLayout(boxSecoes);
     laySecoes->setSpacing(12);
     laySecoes->setContentsMargins(20, 25, 20, 20);
@@ -434,9 +711,9 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
         listSecoes->addItem(item);
     }
 
-    auto* btnAddSecao  = new QPushButton("➕ Adicionar Seção", scrollContent);
-    auto* btnEditSecao = new QPushButton("✏️ Editar Seção", scrollContent);
-    auto* btnRemSecao  = new QPushButton("🗑️ Remover Seção", scrollContent);
+    auto* btnAddSecao  = new QPushButton(" Adicionar Seção", scrollContent);
+    auto* btnEditSecao = new QPushButton(" Editar Seção", scrollContent);
+    auto* btnRemSecao  = new QPushButton("️ Remover Seção", scrollContent);
     btnRemSecao->setObjectName("btnDanger");
 
     auto* layoutBtnSecoes = new QHBoxLayout();
@@ -451,7 +728,7 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
     scrollLayout->addWidget(boxSecoes);
 
     // ===== CONFIGURAÇÕES ADICIONAIS =====
-    auto* boxConfig = new QGroupBox("⚙️ Configurações Adicionais", scrollContent);
+    auto* boxConfig = new QGroupBox("️ Configurações Adicionais", scrollContent);
     auto* layConfig = new QVBoxLayout(boxConfig);
     layConfig->setSpacing(10);
     layConfig->setContentsMargins(20, 25, 20, 20);
@@ -491,8 +768,8 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
 
     auto* btnCancel  = new QPushButton("Cancelar", &dlg);
     btnCancel->setObjectName("btnCancel");
-    auto* btnPreview = new QPushButton("📄 Visualizar", &dlg);
-    auto* btnSave    = new QPushButton(edicao ? "💾 Salvar" : "➕ Criar Ficha", &dlg);
+    auto* btnPreview = new QPushButton(" Visualizar", &dlg);
+    auto* btnSave    = new QPushButton(edicao ? " Salvar" : " Criar Ficha", &dlg);
 
     btnLayout->addStretch();
     btnLayout->addWidget(btnCancel);
@@ -519,19 +796,44 @@ bool abrirDialogoFicha(QWidget* parent, Ficha& ficha, bool edicao)
         visualizarFicha(&dlg, ficha);
     });
 
+    // ===== SEÇÕES: adicionar/editar/remover =====
     QObject::connect(btnAddSecao, &QPushButton::clicked, &dlg, [&]() {
-        QMessageBox::information(&dlg, "Em desenvolvimento",
-                                 "Funcionalidade de adicionar seção será implementada em breve.");
+        Secao novaSecao;
+
+        if (abrirDialogoSecao(&dlg, novaSecao, false)) {
+            ficha.secoes.append(novaSecao);
+
+            QString item = QString("%1 - %2 (%3 quesitos)")
+                               .arg(novaSecao.identificador, novaSecao.titulo)
+                               .arg(novaSecao.quesitos.size());
+
+            listSecoes->addItem(item);
+        }
     });
 
     QObject::connect(btnEditSecao, &QPushButton::clicked, &dlg, [&]() {
-        if (listSecoes->currentRow() < 0) {
+        int row = listSecoes->currentRow();
+        if (row < 0) {
             QMessageBox::information(&dlg, "Editar Seção", "Selecione uma seção.");
             return;
         }
-        QMessageBox::information(&dlg, "Em desenvolvimento",
-                                 "Funcionalidade de editar seção será implementada em breve.");
+
+        if (row >= ficha.secoes.size()) return;
+
+        Secao& secao = ficha.secoes[row];
+
+        if (abrirDialogoSecao(&dlg, secao, true)) {
+            QString item = QString("%1 - %2 (%3 quesitos)")
+            .arg(secao.identificador, secao.titulo)
+                .arg(secao.quesitos.size());
+
+            listSecoes->item(row)->setText(item);
+        }
     });
+
+    // Adicionar também duplo clique para editar
+    QObject::connect(listSecoes, &QListWidget::doubleClicked,
+                     btnEditSecao, &QPushButton::click);
 
     QObject::connect(btnRemSecao, &QPushButton::clicked, &dlg, [&]() {
         int row = listSecoes->currentRow();
@@ -671,7 +973,7 @@ th { background: #e0e0e0; }
 
     // Botões
     auto* btnLayout = new QHBoxLayout();
-    auto* btnExportPdf = new QPushButton("📄 Exportar PDF", &dlg);
+    auto* btnExportPdf = new QPushButton(" Exportar PDF", &dlg);
     auto* btnClose = new QPushButton("Fechar", &dlg);
 
     btnLayout->addWidget(btnExportPdf);
@@ -718,13 +1020,13 @@ PaginaFichas::PaginaFichas(QWidget* parent)
     , m_table(new QTableView(this))
     , m_model(new QStandardItemModel(0, 6, this))
     , m_filter(new FichaFilterModel(this))
-    , m_btnNovo(new QPushButton("➕ Nova Ficha", this))
-    , m_btnEditar(new QPushButton("✏️ Editar", this))
-    , m_btnRemover(new QPushButton("🗑️ Excluir", this))
-    , m_btnRecarregar(new QPushButton("🔄 Recarregar", this))
-    , m_btnExportCsv(new QPushButton("📤 Exportar CSV", this))
-    , m_btnVisualizar(new QPushButton("👁️ Visualizar", this))
-    , m_btnExportPdf(new QPushButton("📄 Exportar PDF", this))
+    , m_btnNovo(new QPushButton(" Nova Ficha", this))
+    , m_btnEditar(new QPushButton("️ Editar", this))
+    , m_btnRemover(new QPushButton("️ Excluir", this))
+    , m_btnRecarregar(new QPushButton(" Recarregar", this))
+    , m_btnExportCsv(new QPushButton(" Exportar CSV", this))
+    , m_btnVisualizar(new QPushButton(" Visualizar", this))
+    , m_btnExportPdf(new QPushButton(" Exportar PDF", this))
     , m_labelTotal(new QLabel(this))
     , m_editBusca(new QLineEdit(this))
     , m_comboTipo(new QComboBox(this))
@@ -998,7 +1300,7 @@ PaginaFichas::PaginaFichas(QWidget* parent)
 
     // ===== HEADER =====
     auto* headerLayout = new QHBoxLayout();
-    auto* titulo = new QLabel("📋 Fichas de Avaliação Cadastradas", this);
+    auto* titulo = new QLabel(" Fichas de Avaliação Cadastradas", this);
     titulo->setObjectName("titulo");
 
     headerLayout->addWidget(titulo);
@@ -1012,7 +1314,7 @@ PaginaFichas::PaginaFichas(QWidget* parent)
     auto* filterLayout = new QHBoxLayout();
     filterLayout->setSpacing(12);
 
-    auto* lblBuscar = new QLabel("🔍 Buscar:", this);
+    auto* lblBuscar = new QLabel(" Buscar:", this);
     lblBuscar->setObjectName("labelBuscar");
     filterLayout->addWidget(lblBuscar);
 
@@ -1022,7 +1324,7 @@ PaginaFichas::PaginaFichas(QWidget* parent)
 
     filterLayout->addSpacing(20);
 
-    auto* lblTipo = new QLabel("📂 Tipo:", this);
+    auto* lblTipo = new QLabel(" Tipo:", this);
     lblTipo->setObjectName("labelTipo");
     filterLayout->addWidget(lblTipo);
 
@@ -1039,14 +1341,14 @@ PaginaFichas::PaginaFichas(QWidget* parent)
     root->addWidget(m_table, 1);
 
     // ===== BOTÕES DE AÇÃO =====
-    auto* btnLayout = new QHBoxLayout();
-    btnLayout->setSpacing(12);
-    btnLayout->addWidget(m_btnVisualizar);
-    btnLayout->addWidget(m_btnEditar);
-    btnLayout->addWidget(m_btnRemover);
-    btnLayout->addStretch();
-    btnLayout->addWidget(m_btnRecarregar);
-    root->addLayout(btnLayout);
+    auto* btnLayoutBottom = new QHBoxLayout();
+    btnLayoutBottom->setSpacing(12);
+    btnLayoutBottom->addWidget(m_btnVisualizar);
+    btnLayoutBottom->addWidget(m_btnEditar);
+    btnLayoutBottom->addWidget(m_btnRemover);
+    btnLayoutBottom->addStretch();
+    btnLayoutBottom->addWidget(m_btnRecarregar);
+    root->addLayout(btnLayoutBottom);
 
     // ===== RODAPÉ =====
     root->addWidget(m_labelTotal);
@@ -1634,6 +1936,8 @@ td {
 
 QString PaginaFichas::fichaParaString(const Ficha& f) const {
     QStringList parts;
+
+    // Dados básicos
     parts << QString::number(f.id);
     parts << f.tipoFicha;
     parts << f.resolucaoNum;
@@ -1642,14 +1946,29 @@ QString PaginaFichas::fichaParaString(const Ficha& f) const {
     parts << f.categoriaCurso;
     parts << QString::number(f.notaMin);
     parts << QString::number(f.notaMax);
-    parts << QString::number(f.secoes.size());
     parts << (f.incluirDataAvaliacao ? "1" : "0");
     parts << (f.incluirProfessorAvaliador ? "1" : "0");
     parts << (f.incluirProfessorOrientador ? "1" : "0");
     parts << (f.incluirObservacoes ? "1" : "0");
     parts << f.textoAprovacao;
 
-    // TODO: Serializar seções completas (quesitos, etc)
+    // Número de seções
+    parts << QString::number(f.secoes.size());
+
+    // Serializar cada seção
+    for (const auto& secao : f.secoes) {
+        parts << secao.identificador;
+        parts << secao.titulo;
+        parts << QString::number(secao.quesitos.size());
+
+        // Serializar cada quesito
+        for (const auto& q : secao.quesitos) {
+            parts << q.nome;
+            parts << (q.autoCalculado ? "1" : "0");
+            parts << (q.temPeso ? "1" : "0");
+            parts << QString::number(q.peso);
+        }
+    }
 
     return parts.join(";");
 }
@@ -1660,22 +1979,56 @@ Ficha PaginaFichas::stringParaFicha(const QString& linha) const {
 
     if (p.size() < 14) return f;
 
-    f.id = p[0].toInt();
-    f.tipoFicha = p[1];
-    f.resolucaoNum = p[2];
-    f.resolucaoAno = p[3];
-    f.curso = p[4];
-    f.categoriaCurso = p[5];
-    f.notaMin = p[6].toDouble();
-    f.notaMax = p[7].toDouble();
-    // p[8] é numSeções (será reconstruído)
-    f.incluirDataAvaliacao = (p[9] == "1");
-    f.incluirProfessorAvaliador = (p[10] == "1");
-    f.incluirProfessorOrientador = (p[11] == "1");
-    f.incluirObservacoes = (p[12] == "1");
-    f.textoAprovacao = p[13];
+    int idx = 0;
 
-    // TODO: Deserializar seções completas
+    // Dados básicos
+    f.id = p[idx++].toInt();
+    f.tipoFicha = p[idx++];
+    f.resolucaoNum = p[idx++];
+    f.resolucaoAno = p[idx++];
+    f.curso = p[idx++];
+    f.categoriaCurso = p[idx++];
+    f.notaMin = p[idx++].toDouble();
+    f.notaMax = p[idx++].toDouble();
+    f.incluirDataAvaliacao = (p[idx++] == "1");
+    f.incluirProfessorAvaliador = (p[idx++] == "1");
+    f.incluirProfessorOrientador = (p[idx++] == "1");
+    f.incluirObservacoes = (p[idx++] == "1");
+    f.textoAprovacao = p[idx++];
+
+    // Número de seções
+    int numSecoes = p[idx++].toInt();
+
+    // Deserializar cada seção
+    for (int i = 0; i < numSecoes && idx < p.size(); ++i) {
+        Secao secao;
+
+        secao.identificador = p[idx++];
+        secao.titulo = p[idx++];
+
+        if (idx >= p.size()) break;
+        int numQuesitos = p[idx++].toInt();
+
+        // Deserializar cada quesito
+        for (int j = 0; j < numQuesitos && idx < p.size(); ++j) {
+            Quesito q;
+
+            q.nome = p[idx++];
+            if (idx >= p.size()) break;
+
+            q.autoCalculado = (p[idx++] == "1");
+            if (idx >= p.size()) break;
+
+            q.temPeso = (p[idx++] == "1");
+            if (idx >= p.size()) break;
+
+            q.peso = p[idx++].toDouble();
+
+            secao.quesitos.append(q);
+        }
+
+        f.secoes.append(secao);
+    }
 
     return f;
 }

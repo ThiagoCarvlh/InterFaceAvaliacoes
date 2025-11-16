@@ -30,26 +30,23 @@ struct Quesito {
     int ordem{0};
 };
 
-struct SecaoAvaliacao {
-    QString identificador;  // "I", "II", "A", "B"
+struct Secao {
+    QString identificador;
     QString titulo;
-    QString tipoCalculo;    // "media", "ponderada", "soma", "manual"
-    double pesoSecao{1.0};
     QVector<Quesito> quesitos;
 };
 
 struct Ficha {
     int id{0};
-    QString tipoFicha;           // "TCC", "Projeto Integrador"
+    QString tipoFicha;
     QString resolucaoNum;
     QString resolucaoAno;
     QString curso;
-    QString categoriaCurso;      // "Técnico - Mecânica"
+    QString categoriaCurso;
     double notaMin{0.0};
     double notaMax{10.0};
-    QVector<SecaoAvaliacao> secoes;
+    QVector<Secao> secoes;  // ← Mudou de SecaoAvaliacao para Secao
 
-    // Campos opcionais
     bool incluirDataAvaliacao{true};
     bool incluirProfessorAvaliador{true};
     bool incluirProfessorOrientador{false};

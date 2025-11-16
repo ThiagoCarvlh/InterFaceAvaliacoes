@@ -1,1 +1,1 @@
-2;Projeto Estrutura de Dados;01;2025;Engenharia Mecânica;Graduação - Engenharia Mecânica;0;8;0;1;1;1;1;
+1;Projeto;01;2025;Engenharia de Software;Graduação - Engenharia de Software;0;8;1;1;1;1;;1;1;Requísitos Obrigatórios;2;Struct;0;0;1;Persistência de Dados;0;0;1
