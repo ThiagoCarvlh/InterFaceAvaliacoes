@@ -1,5 +1,7 @@
 #include "paginaavaliadores.h"
 #include "ui_paginaavaliadores.h"
+#include "vinculos.h"
+
 
 #include <QTableView>
 #include <QStandardItemModel>
@@ -21,6 +23,7 @@
 #include <QRegularExpression>
 #include <QSortFilterProxyModel>
 #include <QFileDialog>
+
 
 // ====== Filtro para busca + categoria ======
 class AvaliadorFilterModel : public QSortFilterProxyModel {
@@ -403,7 +406,7 @@ PaginaAvaliadores::PaginaAvaliadores(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::PaginaAvaliadores)
     , m_table(new QTableView(this))
-    , m_model(new QStandardItemModel(0, 6, this))
+    , m_model(new QStandardItemModel(0, 8, this)) // ID, Nome, Email, CPF, Categoria, Senha, Status, Projetos atrib.
     , m_filter(new AvaliadorFilterModel(this))
     , m_btnNovo(new QPushButton(" Adicionar", this))
     , m_btnEditar(new QPushButton("️ Editar", this))
@@ -661,7 +664,8 @@ PaginaAvaliadores::PaginaAvaliadores(QWidget* parent)
     root->addWidget(m_labelTotal);
 
     // Configuração do modelo
-    m_model->setHorizontalHeaderLabels({"ID","Nome","Email","CPF","Categoria","Senha"});
+    m_model->setHorizontalHeaderLabels(
+        {"ID","Nome","Email","CPF","Categoria","Senha","Status","Projetos atrib."});
     m_filter->setSourceModel(m_model);
     m_table->setModel(m_filter);
     m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -681,6 +685,9 @@ PaginaAvaliadores::PaginaAvaliadores(QWidget* parent)
     m_table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     m_table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     m_table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    m_table->horizontalHeader()->setSectionResizeMode(5, QHeaderView::ResizeToContents); // Senha (oculta)
+    m_table->horizontalHeader()->setSectionResizeMode(6, QHeaderView::ResizeToContents); // Status
+    m_table->horizontalHeader()->setSectionResizeMode(7, QHeaderView::ResizeToContents); // Projetos atrib.
 
     // Duplo clique para editar
     connect(m_table, &QTableView::doubleClicked,
@@ -717,23 +724,29 @@ int PaginaAvaliadores::selectedRow() const {
 }
 
 void PaginaAvaliadores::addAvaliador(const QString& nome,
-                                     const QString& email,
-                                     const QString& cpf,
-                                     const QString& categoria,
-                                     const QString& senha)
+                                    const QString& email,
+                                    const QString& cpf,
+                                    const QString& categoria,
+                                    const QString& senha,
+                                    const QString& status)
 {
     QList<QStandardItem*> row;
     auto id = new QStandardItem(QString::number(m_nextId++));
     id->setEditable(false);
 
-    auto itNome  = new QStandardItem(nome);
-    auto itEmail = new QStandardItem(email);
-    auto itCpf   = new QStandardItem(cpf);
-    auto itCat   = new QStandardItem(categoria);
-    auto itSenha = new QStandardItem(senha);
-    itSenha->setEditable(false);
+    auto itNome    = new QStandardItem(nome);
+    auto itEmail   = new QStandardItem(email);
+    auto itCpf     = new QStandardItem(cpf);
+    auto itCat     = new QStandardItem(categoria);
+    auto itSenha   = new QStandardItem(senha);
+    auto itStatus  = new QStandardItem(status);
+    auto itProjAtrib = new QStandardItem("0"); // vai ser atualizado depois
 
-    row << id << itNome << itEmail << itCpf << itCat << itSenha;
+    itSenha->setEditable(false);
+    itProjAtrib->setEditable(false);
+    itStatus->setEditable(false);
+
+    row << id << itNome << itEmail << itCpf << itCat << itSenha << itStatus << itProjAtrib;
     m_model->appendRow(row);
 }
 
@@ -742,7 +755,12 @@ void PaginaAvaliadores::onNovo() {
     if (!abrirDialogoAvaliador(this, data, false))
         return;
 
-    addAvaliador(data.nome, data.email, data.cpf, data.categoria, data.senha);
+    addAvaliador(data.nome,
+                 data.email,
+                 data.cpf,
+                 data.categoria,
+                 data.senha,
+                 "Ativo");
     salvarNoArquivo();
     atualizarTotal();
 }
@@ -899,31 +917,42 @@ void PaginaAvaliadores::onRemover() {
     )");
 
     if (box.exec() == QMessageBox::Yes) {
+        // Guarda CPF antes de remover
+        const QString cpfRemovido = cpf;
+
         m_model->removeRow(r);
         salvarNoArquivo();
         atualizarTotal();
+
+        // Limpa vínculos desse avaliador
+        auto lista = carregarVinculos(m_arquivoVinculo);
+        if (!lista.isEmpty()) {
+            removerVinculosPorAvaliador(lista, cpfRemovido);
+            salvarVinculos(m_arquivoVinculo, lista);
+        }
 
         QMessageBox success(this);
         success.setWindowTitle("Sucesso");
         success.setText(" Avaliador removido com sucesso!");
         success.setIcon(QMessageBox::Information);
         success.setStyleSheet(R"(
-            QMessageBox {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                    stop:0 #0a0e1a, stop:1 #1a1f2e);
-            }
-            QLabel { color: #00FF88; font-weight: bold; }
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                    stop:0 #00A8CC, stop:1 #0088FF);
-                border-radius: 6px;
-                padding: 8px 20px;
-                color: #FFFFFF;
-                font-weight: bold;
-            }
-        )");
+        QMessageBox {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #0a0e1a, stop:1 #1a1f2e);
+        }
+        QLabel { color: #00FF88; font-weight: bold; }
+        QPushButton {
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                stop:0 #00A8CC, stop:1 #0088FF);
+            border-radius: 6px;
+            padding: 8px 20px;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+    )");
         success.exec();
     }
+
 }
 
 void PaginaAvaliadores::onRecarregar() {
@@ -972,28 +1001,45 @@ bool PaginaAvaliadores::carregarDoArquivo() {
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     in.setCodec("UTF-8");
 #endif
+
     while (!in.atEnd()) {
         const QString line = in.readLine();
         if (line.trimmed().isEmpty()) continue;
+
         const QStringList p = line.split(';');
-        if (p.size() < 5) continue;
+        if (p.size() < 5) continue; // ID + Nome + Email + CPF + Categoria
+
+        const QString id        = p.value(0);
+        const QString nome      = p.value(1);
+        const QString email     = p.value(2);
+        const QString cpf       = p.value(3);
+        const QString categoria = p.value(4);
+        const QString senha     = p.size() >= 6 ? p.value(5) : "";
+        const QString status    = p.size() >= 7 ? p.value(6) : "Ativo";
+        const QString projAtrib = p.size() >= 8 ? p.value(7) : "0";
 
         QList<QStandardItem*> row;
-        auto idItem = new QStandardItem(p[0]); idItem->setEditable(false);
-        row << idItem
-            << new QStandardItem(p[1])
-            << new QStandardItem(p[2])
-            << new QStandardItem(p[3])
-            << new QStandardItem(p[4]);
+        auto idItem = new QStandardItem(id);
+        idItem->setEditable(false);
 
-        if (p.size() >= 6)
-            row << new QStandardItem(p[5]);
-        else
-            row << new QStandardItem("");
+        auto itNome    = new QStandardItem(nome);
+        auto itEmail   = new QStandardItem(email);
+        auto itCpf     = new QStandardItem(cpf);
+        auto itCat     = new QStandardItem(categoria);
+        auto itSenha   = new QStandardItem(senha);
+        auto itStatus  = new QStandardItem(status);
+        auto itProj    = new QStandardItem(projAtrib);
 
+        itSenha->setEditable(false);
+        itStatus->setEditable(false);
+        itProj->setEditable(false);
+
+        row << idItem << itNome << itEmail << itCpf << itCat << itSenha << itStatus << itProj;
         m_model->appendRow(row);
     }
+
     recomputarNextId();
+    atualizarProjetosAtribuidos();
     return true;
 }
 
@@ -1107,4 +1153,37 @@ void PaginaAvaliadores::onExportCsv() {
         }
     )");
     msgBox.exec();
+}
+
+void PaginaAvaliadores::atualizarProjetosAtribuidos() {
+    auto vincs = carregarVinculos(m_arquivoVinculo);
+    if (m_model->columnCount() < 8) return;
+
+    if (vincs.isEmpty()) {
+        // zera tudo
+        for (int r = 0; r < m_model->rowCount(); ++r) {
+            if (auto it = m_model->item(r, 7)) {
+                it->setText("0");
+            }
+        }
+        return;
+    }
+
+    // Mapa CPF(normalizado) -> contagem
+    QHash<QString,int> mapa;
+    for (const auto& v : vincs) {
+        QString cpfNorm = v.cpfAvaliador;
+        cpfNorm.remove(QRegularExpression("\\D"));
+        if (cpfNorm.isEmpty()) continue;
+        mapa[cpfNorm] += 1;
+    }
+
+    for (int r = 0; r < m_model->rowCount(); ++r) {
+        QString cpf = m_model->item(r, 3)->text();
+        cpf.remove(QRegularExpression("\\D"));
+        const int count = mapa.value(cpf, 0);
+        if (auto it = m_model->item(r, 7)) {
+            it->setText(QString::number(count));
+        }
+    }
 }

@@ -27,11 +27,11 @@ public:
 private slots:
     void onNovo();
     void onEditar();
+    void onVincularAvaliadores();
+    void onDefinirFicha();
     void onRemover();
     void onRecarregar();
     void onExportCsv();
-
-    // filtros
     void onBuscaChanged(const QString& texto);
     void onCategoriaChanged(int index);
 
@@ -40,10 +40,15 @@ private:
     bool salvarNoArquivo() const;
     bool carregarDoArquivo();
     void recomputarNextId();
+
     void addProjeto(const QString& nome,
                     const QString& desc,
                     const QString& resp,
-                    const QString& categoria);
+                    const QString& categoria,
+                    const QString& status,
+                    const QString& ficha,
+                    const QString& idFicha);
+
     int  selectedRow() const;
     void atualizarTotal();
 
@@ -58,6 +63,8 @@ private:
     // Widgets
     QPushButton* m_btnNovo{};
     QPushButton* m_btnEditar{};
+    QPushButton* m_btnVincular{};
+    QPushButton* m_btnDefinirFicha{};
     QPushButton* m_btnRemover{};
     QPushButton* m_btnRecarregar{};
     QPushButton* m_btnExportCsv{};
@@ -67,5 +74,6 @@ private:
 
     // Dados
     int         m_nextId{1};
-    const QString m_arquivo = "projetos.txt";
+    const QString m_arquivo        = "projetos.txt";
+    const QString m_arquivoVinculo = "vinculos_projetos.csv"; // pra limpar vínculos ao remover projeto
 };

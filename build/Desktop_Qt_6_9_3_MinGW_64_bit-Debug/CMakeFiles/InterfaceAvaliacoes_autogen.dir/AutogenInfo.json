@@ -371,6 +371,18 @@
 			null
 		],
 		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h",
+			"MU",
+			"E766YBBN5G/moc_dialogoselecionarficha.cpp",
+			null
+		],
+		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h",
+			"MU",
+			"E766YBBN5G/moc_dialogovincularavaliadores.cpp",
+			null
+		],
+		[
 			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.h",
 			"MU",
 			"E766YBBN5G/moc_janelaprincipal.cpp",
@@ -398,6 +410,12 @@
 			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h",
 			"MU",
 			"E766YBBN5G/moc_paginaprojetos.cpp",
+			null
+		],
+		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h",
+			"MU",
+			"E766YBBN5G/moc_vinculos.cpp",
 			null
 		]
 	],
@@ -481,6 +499,16 @@
 			null
 		],
 		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.cpp",
 			"MU",
 			null
@@ -502,6 +530,11 @@
 		],
 		[
 			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.cpp",
 			"MU",
 			null
 		]

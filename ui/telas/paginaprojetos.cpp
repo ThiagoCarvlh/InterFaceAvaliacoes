@@ -24,6 +24,10 @@
 #include <QVBoxLayout>
 #include <QSortFilterProxyModel>
 
+#include "vinculos.h"
+#include "dialogoselecionarficha.h"
+#include "dialogovincularavaliadores.h"
+
 // ================== Filtro para busca + categoria (Projetos) ==================
 
 class ProjetoFilterModel : public QSortFilterProxyModel {
@@ -296,16 +300,18 @@ static bool abrirDialogoProjeto(QWidget* parent, ProjetoData& data, bool edicao)
 } // namespace
 
 
-// ================== CONSTRUTOR / SETUP ==================
+// ================== CONSTRUTOR / DESTRUTOR ==================
 
 PaginaProjetos::PaginaProjetos(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::PaginaProjetos)
     , m_table(new QTableView(this))
-    , m_model(new QStandardItemModel(0, 5, this)) // ID, Nome, Descrição, Responsável, Área/Categoria
+    , m_model(new QStandardItemModel(0, 8, this)) // 8 colunas
     , m_filter(new ProjetoFilterModel(this))
     , m_btnNovo(new QPushButton(" Adicionar", this))
     , m_btnEditar(new QPushButton(" Editar", this))
+    , m_btnVincular(new QPushButton(" Vincular Avaliadores", this))
+    , m_btnDefinirFicha(new QPushButton(" Definir Ficha", this))
     , m_btnRemover(new QPushButton(" Excluir", this))
     , m_btnRecarregar(new QPushButton(" Recarregar", this))
     , m_btnExportCsv(new QPushButton(" Exportar CSV", this))
@@ -490,7 +496,6 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
             font-size: 12px;
         }
 
-        /* diálogo / groupbox / radios / etc herdados pelos QDialogs */
         QDialog {
             background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                 stop:0 #0a0e1a, stop:1 #1a1f2e);
@@ -579,21 +584,23 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
     // ===== Tabela =====
     root->addWidget(m_table, 1);
 
-    // ===== Linha de botões: Editar / Excluir / Recarregar =====
+    // ===== Linha de botões =====
     auto* btnLayout = new QHBoxLayout();
     btnLayout->setSpacing(12);
     btnLayout->addWidget(m_btnEditar);
+    btnLayout->addWidget(m_btnVincular);
+    btnLayout->addWidget(m_btnDefinirFicha);
     btnLayout->addWidget(m_btnRemover);
     btnLayout->addStretch();
     btnLayout->addWidget(m_btnRecarregar);
     root->addLayout(btnLayout);
 
-    // ===== Rodapé: total de projetos =====
+    // ===== Rodapé =====
     root->addWidget(m_labelTotal);
 
     // Modelo + filtro
     m_model->setHorizontalHeaderLabels(
-        {"ID","Nome","Descrição","Responsável","Área/Categoria"});
+        {"ID","Nome","Descrição","Responsável","Área/Categoria","Status","Ficha","IdFicha"});
     m_filter->setSourceModel(m_model);
     m_table->setModel(m_filter);
     m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -606,24 +613,30 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
     m_table->sortByColumn(0, Qt::AscendingOrder);
     m_table->setFocusPolicy(Qt::NoFocus);
 
-    // Ajuste de largura das colunas (igual Avaliadores)
     auto header = m_table->horizontalHeader();
     header->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(2, QHeaderView::Stretch);
     header->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(5, QHeaderView::ResizeToContents); // Status
+    header->setSectionResizeMode(6, QHeaderView::ResizeToContents); // Ficha
+    header->setSectionResizeMode(7, QHeaderView::ResizeToContents);
+
+    m_table->setColumnHidden(7, true); // IdFicha escondido
 
     // Duplo clique = editar
     connect(m_table, &QTableView::doubleClicked,
             this, [this](const QModelIndex&) { onEditar(); });
 
     // Botões
-    connect(m_btnNovo,       &QPushButton::clicked, this, &PaginaProjetos::onNovo);
-    connect(m_btnEditar,     &QPushButton::clicked, this, &PaginaProjetos::onEditar);
-    connect(m_btnRemover,    &QPushButton::clicked, this, &PaginaProjetos::onRemover);
-    connect(m_btnRecarregar, &QPushButton::clicked, this, &PaginaProjetos::onRecarregar);
-    connect(m_btnExportCsv,  &QPushButton::clicked, this, &PaginaProjetos::onExportCsv);
+    connect(m_btnNovo,        &QPushButton::clicked, this, &PaginaProjetos::onNovo);
+    connect(m_btnEditar,      &QPushButton::clicked, this, &PaginaProjetos::onEditar);
+    connect(m_btnRemover,     &QPushButton::clicked, this, &PaginaProjetos::onRemover);
+    connect(m_btnRecarregar,  &QPushButton::clicked, this, &PaginaProjetos::onRecarregar);
+    connect(m_btnExportCsv,   &QPushButton::clicked, this, &PaginaProjetos::onExportCsv);
+    connect(m_btnDefinirFicha,&QPushButton::clicked, this, &PaginaProjetos::onDefinirFicha);
+    connect(m_btnVincular,    &QPushButton::clicked, this, &PaginaProjetos::onVincularAvaliadores);
 
     // Filtros
     connect(m_editBusca, &QLineEdit::textChanged,
@@ -637,7 +650,8 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
     atualizarTotal();
 }
 
-PaginaProjetos::~PaginaProjetos() {
+PaginaProjetos::~PaginaProjetos()
+{
     delete ui;
 }
 
@@ -646,16 +660,25 @@ PaginaProjetos::~PaginaProjetos() {
 void PaginaProjetos::addProjeto(const QString& nome,
                                 const QString& desc,
                                 const QString& resp,
-                                const QString& categoria)
+                                const QString& categoria,
+                                const QString& status,
+                                const QString& ficha,
+                                const QString& idFicha)
 {
     QList<QStandardItem*> row;
-    auto idItem = new QStandardItem(QString::number(m_nextId++));
+
+    auto* idItem = new QStandardItem(QString::number(m_nextId++));
     idItem->setEditable(false);
+
     row << idItem
         << new QStandardItem(nome)
         << new QStandardItem(desc)
         << new QStandardItem(resp)
-        << new QStandardItem(categoria);
+        << new QStandardItem(categoria)
+        << new QStandardItem(status)
+        << new QStandardItem(ficha)
+        << new QStandardItem(idFicha);
+
     m_model->appendRow(row);
 }
 
@@ -674,7 +697,15 @@ void PaginaProjetos::onNovo() {
     if (!abrirDialogoProjeto(this, data, false))
         return;
 
-    addProjeto(data.nome, data.descricao, data.responsavel, data.categoria);
+    // Novo projeto começa "Cadastrado" e sem ficha definida
+    addProjeto(data.nome,
+               data.descricao,
+               data.responsavel,
+               data.categoria,
+               "Cadastrado",
+               "Não definida",
+               "-1");
+
     salvarNoArquivo();
     atualizarTotal();
 }
@@ -688,18 +719,104 @@ void PaginaProjetos::onEditar() {
     }
 
     ProjetoData data;
-    data.nome        = m_model->item(r,1)->text();
-    data.descricao   = m_model->item(r,2)->text();
-    data.responsavel = m_model->item(r,3)->text();
-    data.categoria   = m_model->item(r,4)->text();
+    data.nome        = m_model->item(r, 1)->text();
+    data.descricao   = m_model->item(r, 2)->text();
+    data.responsavel = m_model->item(r, 3)->text();
+    data.categoria   = m_model->item(r, 4)->text();
 
     if (!abrirDialogoProjeto(this, data, true))
         return;
 
-    m_model->item(r,1)->setText(data.nome);
-    m_model->item(r,2)->setText(data.descricao);
-    m_model->item(r,3)->setText(data.responsavel);
-    m_model->item(r,4)->setText(data.categoria);
+    m_model->item(r, 1)->setText(data.nome);
+    m_model->item(r, 2)->setText(data.descricao);
+    m_model->item(r, 3)->setText(data.responsavel);
+    m_model->item(r, 4)->setText(data.categoria);
+    // Status (5) e Ficha (6) permanecem
+
+    salvarNoArquivo();
+    atualizarTotal();
+}
+
+void PaginaProjetos::onVincularAvaliadores() {
+    const int r = selectedRow();
+    if (r < 0) {
+        QMessageBox::information(this, "Vincular Avaliadores",
+                                 "Selecione um projeto.");
+        return;
+    }
+
+    bool ok = false;
+    const int idProj = m_model->item(r, 0)->text().toInt(&ok);
+    if (!ok) {
+        QMessageBox::warning(this, "Vincular Avaliadores",
+                             "ID de projeto inválido.");
+        return;
+    }
+
+    const QString nomeProj      = m_model->item(r, 1)->text();
+    const QString categoriaProj = m_model->item(r, 4)->text();
+
+    DialogoVincularAvaliadores dlg(idProj, nomeProj, categoriaProj, this);
+    dlg.setWindowTitle("Vincular Avaliadores");
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const int qtd = dlg.totalSelecionados();
+
+        QString novoStatus;
+        if (qtd == 0)
+            novoStatus = "Cadastrado";
+        else if (qtd < 3)
+            novoStatus = "Aguardando Avaliadores";
+        else
+            novoStatus = "Pronto para Avaliação";
+
+        if (auto* it = m_model->item(r, 5))
+            it->setText(novoStatus);
+
+        salvarNoArquivo();
+        atualizarTotal();
+    }
+}
+
+void PaginaProjetos::onDefinirFicha() {
+    const int r = selectedRow();
+    if (r < 0) {
+        QMessageBox::information(this, "Definir Ficha",
+                                 "Selecione um projeto.");
+        return;
+    }
+
+    // pega o curso a partir da categoria: "Graduação - Engenharia de Software"
+    QString categoria = m_model->item(r, 4)->text();
+    QString cursoProj = categoria;
+    int sep = cursoProj.indexOf('-');
+    if (sep >= 0)
+        cursoProj = cursoProj.mid(sep + 1).trimmed();
+    else
+        cursoProj = cursoProj.trimmed();
+
+    DialogoSelecionarFicha dlg(cursoProj, this);
+    dlg.setWindowTitle("Selecionar Ficha para o Projeto");
+
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    const int fichaId = dlg.fichaIdSelecionada();
+    if (fichaId <= 0) return;
+
+    const QString fichaLabel = dlg.fichaLabelSelecionada();
+
+    // atualiza colunas "Ficha" e "IdFicha"
+    if (auto* itFicha = m_model->item(r, 6))
+        itFicha->setText(fichaLabel);
+    if (auto* itIdFicha = m_model->item(r, 7))
+        itIdFicha->setText(QString::number(fichaId));
+
+    // regra de status: se estava "Cadastrado", passa pra "Aguardando Avaliadores"
+    if (auto* itStatus = m_model->item(r, 5)) {
+        if (itStatus->text() == "Cadastrado")
+            itStatus->setText("Aguardando Avaliadores");
+    }
 
     salvarNoArquivo();
     atualizarTotal();
@@ -732,7 +849,7 @@ void PaginaProjetos::onRemover() {
     box.setText(texto);
     box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
 
-    if (auto btnYes = box.button(QMessageBox::Yes)) {
+    if (auto* btnYes = box.button(QMessageBox::Yes)) {
         btnYes->setText("Excluir");
     }
 
@@ -756,9 +873,21 @@ void PaginaProjetos::onRemover() {
     )");
 
     if (box.exec() == QMessageBox::Yes) {
+        bool okId = false;
+        int idInt = id.toInt(&okId);
+
         m_model->removeRow(r);
         salvarNoArquivo();
         atualizarTotal();
+
+        // Remove vínculos desse projeto (se houver)
+        if (okId) {
+            auto lista = carregarVinculos(m_arquivoVinculo);
+            if (!lista.isEmpty()) {
+                removerVinculosPorProjeto(lista, idInt);
+                salvarVinculos(m_arquivoVinculo, lista);
+            }
+        }
     }
 }
 
@@ -818,21 +947,31 @@ bool PaginaProjetos::carregarDoArquivo() {
     while (!in.atEnd()) {
         const QString line = in.readLine();
         if (line.trimmed().isEmpty()) continue;
+
         const QStringList p = line.split(';');
-        if (p.size() < 4) continue;
+        if (p.size() < 5) continue; // ID + 4 campos básicos
+
+        const QString id         = p.value(0);
+        const QString nome       = p.value(1);
+        const QString desc       = p.value(2);
+        const QString resp       = p.value(3);
+        const QString categoria  = p.value(4);
+        const QString status     = p.size() >= 6 ? p.value(5) : "Cadastrado";
+        const QString ficha      = p.size() >= 7 ? p.value(6) : "Não definida";
+        const QString idFicha    = p.size() >= 8 ? p.value(7) : "-1";
 
         QList<QStandardItem*> row;
-        auto idItem = new QStandardItem(p[0]);
+        auto* idItem = new QStandardItem(id);
         idItem->setEditable(false);
-        row << idItem
-            << new QStandardItem(p.value(1))
-            << new QStandardItem(p.value(2))
-            << new QStandardItem(p.value(3));
 
-        if (p.size() >= 5)
-            row << new QStandardItem(p[4]);
-        else
-            row << new QStandardItem("");
+        row << idItem
+            << new QStandardItem(nome)
+            << new QStandardItem(desc)
+            << new QStandardItem(resp)
+            << new QStandardItem(categoria)
+            << new QStandardItem(status)
+            << new QStandardItem(ficha)
+            << new QStandardItem(idFicha);
 
         m_model->appendRow(row);
     }
@@ -886,7 +1025,7 @@ void PaginaProjetos::onExportCsv() {
     out.setCodec("UTF-8");
 #endif
 
-    out << "ID;Nome;Descricao;Responsavel;Categoria\n";
+    out << "ID;Nome;Descricao;Responsavel;Categoria;Status;Ficha;IdFicha\n";
 
     for (int r = 0; r < m_model->rowCount(); ++r) {
         QStringList cols;

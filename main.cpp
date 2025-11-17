@@ -1,12 +1,18 @@
 #include <QApplication>
+#include "dialogologin.h"
 #include "janelaprincipal.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/img/img/Logo.jpg"));
+
+    DialogoLogin dlg;
+    if (dlg.exec() != QDialog::Accepted)
+        return 0;   // usuário cancelou
+
     JanelaPrincipal w;
-    w.setMinimumSize(900, 600);
+    w.configurarPorLogin(dlg.isAdmin());
     w.show();
+
     return a.exec();
 }

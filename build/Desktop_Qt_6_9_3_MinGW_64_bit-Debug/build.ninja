@@ -113,6 +113,30 @@ build CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginafichas.cpp.obj: CXX_COMP
   OBJECT_DIR = CMakeFiles\InterfaceAvaliacoes.dir
   OBJECT_FILE_DIR = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas
 
+build CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/vinculos.cpp.obj: CXX_COMPILER__InterfaceAvaliacoes_unscanned_Debug C$:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.cpp || cmake_object_order_depends_target_InterfaceAvaliacoes
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas\vinculos.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/include -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas -isystem C:/Qt/6.9.3/mingw_64/include/QtCore -isystem C:/Qt/6.9.3/mingw_64/include -isystem C:/Qt/6.9.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.9.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.9.3/mingw_64/include/QtGui -isystem C:/Qt/6.9.3/mingw_64/include/QtPrintSupport
+  OBJECT_DIR = CMakeFiles\InterfaceAvaliacoes.dir
+  OBJECT_FILE_DIR = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas
+
+build CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogovincularavaliadores.cpp.obj: CXX_COMPILER__InterfaceAvaliacoes_unscanned_Debug C$:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.cpp || cmake_object_order_depends_target_InterfaceAvaliacoes
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas\dialogovincularavaliadores.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/include -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas -isystem C:/Qt/6.9.3/mingw_64/include/QtCore -isystem C:/Qt/6.9.3/mingw_64/include -isystem C:/Qt/6.9.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.9.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.9.3/mingw_64/include/QtGui -isystem C:/Qt/6.9.3/mingw_64/include/QtPrintSupport
+  OBJECT_DIR = CMakeFiles\InterfaceAvaliacoes.dir
+  OBJECT_FILE_DIR = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas
+
+build CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogoselecionarficha.cpp.obj: CXX_COMPILER__InterfaceAvaliacoes_unscanned_Debug C$:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.cpp || cmake_object_order_depends_target_InterfaceAvaliacoes
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas\dialogoselecionarficha.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/include -IC:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas -isystem C:/Qt/6.9.3/mingw_64/include/QtCore -isystem C:/Qt/6.9.3/mingw_64/include -isystem C:/Qt/6.9.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.9.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.9.3/mingw_64/include/QtGui -isystem C:/Qt/6.9.3/mingw_64/include/QtPrintSupport
+  OBJECT_DIR = CMakeFiles\InterfaceAvaliacoes.dir
+  OBJECT_FILE_DIR = CMakeFiles\InterfaceAvaliacoes.dir\ui\telas
+
 build CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/EWIEGA46WW/qrc_resources.cpp.obj: CXX_COMPILER__InterfaceAvaliacoes_unscanned_Debug C$:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/EWIEGA46WW/qrc_resources.cpp || cmake_object_order_depends_target_InterfaceAvaliacoes
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\InterfaceAvaliacoes.dir\InterfaceAvaliacoes_autogen\EWIEGA46WW\qrc_resources.cpp.obj.d
@@ -129,7 +153,7 @@ build CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/EWIEGA46WW/
 #############################################
 # Link the executable InterfaceAvaliacoes.exe
 
-build InterfaceAvaliacoes.exe: CXX_EXECUTABLE_LINKER__InterfaceAvaliacoes_Debug CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/mocs_compilation.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/main.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/janelaprincipal.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogologin.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaprojetos.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaavaliadores.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginanotas.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginafichas.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/EWIEGA46WW/qrc_resources.cpp.obj | C$:/Qt/6.9.3/mingw_64/lib/libQt6PrintSupport.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Core.a || InterfaceAvaliacoes_autogen InterfaceAvaliacoes_autogen_timestamp_deps
+build InterfaceAvaliacoes.exe: CXX_EXECUTABLE_LINKER__InterfaceAvaliacoes_Debug CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/mocs_compilation.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/main.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/janelaprincipal.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogologin.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaprojetos.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginaavaliadores.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginanotas.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/paginafichas.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/vinculos.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogovincularavaliadores.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/ui/telas/dialogoselecionarficha.cpp.obj CMakeFiles/InterfaceAvaliacoes.dir/InterfaceAvaliacoes_autogen/EWIEGA46WW/qrc_resources.cpp.obj | C$:/Qt/6.9.3/mingw_64/lib/libQt6PrintSupport.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Gui.a C$:/Qt/6.9.3/mingw_64/lib/libQt6Core.a || InterfaceAvaliacoes_autogen InterfaceAvaliacoes_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_LIBRARIES = C:/Qt/6.9.3/mingw_64/lib/libQt6PrintSupport.a  C:/Qt/6.9.3/mingw_64/lib/libQt6Widgets.a  C:/Qt/6.9.3/mingw_64/lib/libQt6Gui.a  C:/Qt/6.9.3/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -ld3d11  -ldxgi  -ldxguid  -ld3d12  -lcomdlg32  -lwinspool  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\InterfaceAvaliacoes.dir

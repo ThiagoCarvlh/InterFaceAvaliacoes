@@ -3,6 +3,7 @@
 
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QStandardItem>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -10,6 +11,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTextStream>
+#include <QAbstractItemView>
 
 PaginaNotas::PaginaNotas(QWidget* parent)
     : QWidget(parent)
@@ -23,6 +25,7 @@ PaginaNotas::PaginaNotas(QWidget* parent)
 {
     ui->setupUi(this);
 
+    // Layout de botões
     auto hl = new QHBoxLayout();
     hl->setContentsMargins(0,0,0,0);
     hl->addWidget(m_btnNovo);
@@ -32,6 +35,7 @@ PaginaNotas::PaginaNotas(QWidget* parent)
     hl->addWidget(m_btnRecarregar);
     ui->verticalLayout->addLayout(hl);
 
+    // Tabela
     ui->verticalLayout->addWidget(m_table);
     m_model->setHorizontalHeaderLabels({"ID","Projeto","Avaliador","Media"});
     m_table->setModel(m_model);
@@ -54,15 +58,35 @@ PaginaNotas::PaginaNotas(QWidget* parent)
 
 PaginaNotas::~PaginaNotas() { delete ui; }
 
+// ======== CONTEXTO DO AVALIADOR LOGADO =========
+
+void PaginaNotas::setAvaliador(const QString& cpf,
+                               const QString& nome,
+                               const QString& curso)
+{
+    m_cpfLogado   = cpf;
+    m_nomeLogado  = nome;
+    m_cursoLogado = curso;
+
+    // Aqui depois dá pra usar isso pra filtrar só os projetos do avaliador
+    // e também exibir em algum label na UI, se quiser.
+}
+
+// ================== HELPERS ==================
+
 int PaginaNotas::selectedRow() const {
     const auto idx = m_table->currentIndex();
     return idx.isValid() ? idx.row() : -1;
 }
 
-void PaginaNotas::addNota(const QString& projeto, const QString& avaliador, double media) {
+void PaginaNotas::addNota(const QString& projeto,
+                          const QString& avaliador,
+                          double media)
+{
     QList<QStandardItem*> row;
     auto id = new QStandardItem(QString::number(m_nextId++));
     id->setEditable(false);
+
     row << id
         << new QStandardItem(projeto)
         << new QStandardItem(avaliador)
@@ -70,13 +94,34 @@ void PaginaNotas::addNota(const QString& projeto, const QString& avaliador, doub
     m_model->appendRow(row);
 }
 
+// ================== SLOTS CRUD ==================
+
 void PaginaNotas::onNovo() {
-    bool ok;
-    const auto projeto   = QInputDialog::getText(this, "Nova Nota", "Projeto:", QLineEdit::Normal, {}, &ok);
-    if (!ok || projeto.trimmed().isEmpty()) return;
-    const auto avaliador = QInputDialog::getText(this, "Nova Nota", "Avaliador:", QLineEdit::Normal, {}, &ok);
-    if (!ok) return;
-    double media = QInputDialog::getDouble(this, "Nova Nota", "Média (0–10):", 7.0, 0.0, 10.0, 2, &ok);
+    bool ok = false;
+
+    // Projeto sempre perguntamos (por enquanto)
+    const auto projeto = QInputDialog::getText(
+        this, "Nova Nota", "Projeto:",
+        QLineEdit::Normal, {}, &ok);
+    if (!ok || projeto.trimmed().isEmpty())
+        return;
+
+    QString avaliador;
+
+    // Se for avaliador logado (login com CPF), usamos o nome dele
+    if (!m_cpfLogado.isEmpty()) {
+        avaliador = m_nomeLogado;
+    } else {
+        // Admin ou modo genérico: pergunta o nome do avaliador
+        avaliador = QInputDialog::getText(
+            this, "Nova Nota", "Avaliador:",
+            QLineEdit::Normal, {}, &ok);
+        if (!ok) return;
+    }
+
+    double media = QInputDialog::getDouble(
+        this, "Nova Nota", "Média (0–10):",
+        7.0, 0.0, 10.0, 2, &ok);
     if (!ok) return;
 
     addNota(projeto.trimmed(), avaliador.trimmed(), media);
@@ -85,17 +130,33 @@ void PaginaNotas::onNovo() {
 
 void PaginaNotas::onEditar() {
     const int r = selectedRow();
-    if (r < 0) { QMessageBox::information(this, "Editar", "Selecione um item."); return; }
+    if (r < 0) {
+        QMessageBox::information(this, "Editar", "Selecione um item.");
+        return;
+    }
 
-    bool ok;
-    auto projeto = QInputDialog::getText(this, "Editar Nota", "Projeto:",
-                                         QLineEdit::Normal, m_model->item(r,1)->text(), &ok);
-    if (!ok) return;
-    auto avaliador = QInputDialog::getText(this, "Editar Nota", "Avaliador:",
-                                           QLineEdit::Normal, m_model->item(r,2)->text(), &ok);
-    if (!ok) return;
-    double media = QInputDialog::getDouble(this, "Editar Nota", "Média (0–10):",
-                                           m_model->item(r,3)->text().toDouble(), 0.0, 10.0, 2, &ok);
+    bool ok = false;
+
+    QString projeto   = m_model->item(r,1)->text();
+    QString avaliador = m_model->item(r,2)->text();
+
+    // ADMIN pode editar tudo; avaliador só edita a média
+    if (m_cpfLogado.isEmpty()) {
+        projeto = QInputDialog::getText(
+            this, "Editar Nota", "Projeto:",
+            QLineEdit::Normal, projeto, &ok);
+        if (!ok) return;
+
+        avaliador = QInputDialog::getText(
+            this, "Editar Nota", "Avaliador:",
+            QLineEdit::Normal, avaliador, &ok);
+        if (!ok) return;
+    }
+
+    double media = QInputDialog::getDouble(
+        this, "Editar Nota", "Média (0–10):",
+        m_model->item(r,3)->text().toDouble(),
+        0.0, 10.0, 2, &ok);
     if (!ok) return;
 
     m_model->item(r,1)->setText(projeto);
@@ -107,19 +168,30 @@ void PaginaNotas::onEditar() {
 
 void PaginaNotas::onRemover() {
     const int r = selectedRow();
-    if (r < 0) { QMessageBox::information(this, "Remover", "Selecione um item."); return; }
-    if (QMessageBox::question(this, "Remover", "Remover registro selecionado?") == QMessageBox::Yes) {
+    if (r < 0) {
+        QMessageBox::information(this, "Remover", "Selecione um item.");
+        return;
+    }
+
+    if (QMessageBox::question(this, "Remover",
+                              "Remover registro selecionado?")
+        == QMessageBox::Yes) {
         m_model->removeRow(r);
         salvarNoArquivo();
     }
 }
 
-void PaginaNotas::onRecarregar() { carregarDoArquivo(); }
+void PaginaNotas::onRecarregar() {
+    carregarDoArquivo();
+}
+
+// ================== PERSISTÊNCIA ==================
 
 bool PaginaNotas::salvarNoArquivo() const {
     QFile f(m_arquivo);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QMessageBox::warning(nullptr, "Salvar", "Não foi possível abrir '"+m_arquivo+"' para escrita.");
+        QMessageBox::warning(nullptr, "Salvar",
+                             "Não foi possível abrir '" + m_arquivo + "' para escrita.");
         return false;
     }
     QTextStream out(&f);
@@ -140,11 +212,18 @@ bool PaginaNotas::salvarNoArquivo() const {
 
 bool PaginaNotas::carregarDoArquivo() {
     QFile f(m_arquivo);
-    if (!f.exists()) return true;
+    if (!f.exists()) {
+        m_model->removeRows(0, m_model->rowCount());
+        m_nextId = 1;
+        return true;
+    }
+
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(nullptr, "Carregar", "Não foi possível abrir '"+m_arquivo+"' para leitura.");
+        QMessageBox::warning(nullptr, "Carregar",
+                             "Não foi possível abrir '" + m_arquivo + "' para leitura.");
         return false;
     }
+
     m_model->removeRows(0, m_model->rowCount());
 
     QTextStream in(&f);
@@ -154,15 +233,22 @@ bool PaginaNotas::carregarDoArquivo() {
     while (!in.atEnd()) {
         const QString line = in.readLine();
         if (line.trimmed().isEmpty()) continue;
+
         const QStringList p = line.split(';');
         if (p.size() < 4) continue;
 
         QList<QStandardItem*> row;
-        auto idItem = new QStandardItem(p[0]); idItem->setEditable(false);
-        row << idItem << new QStandardItem(p[1])
-            << new QStandardItem(p[2]) << new QStandardItem(p[3]);
+        auto* idItem = new QStandardItem(p[0]);
+        idItem->setEditable(false);
+
+        row << idItem
+            << new QStandardItem(p[1])
+            << new QStandardItem(p[2])
+            << new QStandardItem(p[3]);
+
         m_model->appendRow(row);
     }
+
     recomputarNextId();
     return true;
 }

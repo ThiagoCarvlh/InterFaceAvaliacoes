@@ -609,6 +609,10 @@ InterfaceAvaliacoes_autogen/timestamp: \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/resources.qrc \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.cpp \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.cpp \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.cpp \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.cpp \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.h \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.cpp \
@@ -619,6 +623,8 @@ InterfaceAvaliacoes_autogen/timestamp: \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.cpp \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.cpp \
+	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.ui \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.ui \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.ui \

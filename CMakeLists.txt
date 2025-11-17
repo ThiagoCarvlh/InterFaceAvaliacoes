@@ -27,6 +27,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${UI_SOURCES}
         resources.qrc
+        ui/telas/vinculos.h ui/telas/vinculos.cpp
+        ui/telas/dialogovincularavaliadores.h ui/telas/dialogovincularavaliadores.cpp
+        ui/telas/dialogoselecionarficha.h ui/telas/dialogoselecionarficha.cpp
+
     )
 else()
     add_executable(InterfaceAvaliacoes

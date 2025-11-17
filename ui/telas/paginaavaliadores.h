@@ -26,7 +26,6 @@ private slots:
     void onRemover();
     void onRecarregar();
 
-
     void onBuscaChanged(const QString& texto);
     void onCategoriaChanged(int index);
     void onExportCsv();
@@ -43,8 +42,8 @@ private:
     QLabel*     m_labelTotal{};
     int         m_nextId{1};
 
-    const QString m_arquivo = "avaliadores.csv";
-
+    const QString m_arquivo        = "avaliadores.csv";
+    const QString m_arquivoVinculo = "vinculos_projetos.csv";
 
     bool salvarNoArquivo() const;
     bool carregarDoArquivo();
@@ -55,9 +54,13 @@ private:
                       const QString& email,
                       const QString& cpf,
                       const QString& categoria,
-                      const QString& senha);
+                      const QString& senha,
+                      const QString& status = "Ativo");
 
     void atualizarTotal();
+
+    // Atualiza a coluna "Projetos atribuídos" com base em vinculos_projetos.csv
+    void atualizarProjetosAtribuidos();
 };
 
 #endif // PAGINAAVALIADORES_H
