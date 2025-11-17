@@ -84,10 +84,10 @@ void DialogoLogin::tentarLogin()
         return;
     }
 
-    // 2) AVALIADOR: login = CPF que está em avaliadores.txt, senha fixa "123456"
-    QFile f("avaliadores.txt");
+    // login = CPF que está em avaliadores.csv, senha fixa "123456"
+    QFile f("avaliadores.csv");
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        m_labelStatus->setText("Não foi possível abrir 'avaliadores.txt'. Tente como admin.");
+        m_labelStatus->setText("Não foi possível abrir 'avaliadores.csv'. Tente como admin.");
         return;
     }
 
