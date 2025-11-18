@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../../../ui/telas/dialogoselecionarficha.h"
+#include "../../../../../Estrutura de Dados/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h"
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>

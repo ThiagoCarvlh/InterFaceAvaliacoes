@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QFile>
 #include <QTextStream>
+#include <QRegularExpression>
 
 DialogoLogin::DialogoLogin(QWidget* parent)
     : QDialog(parent)
@@ -69,22 +70,29 @@ DialogoLogin::~DialogoLogin()
 
 void DialogoLogin::tentarLogin()
 {
-    const QString login = m_editLogin->text().trimmed();
-    const QString senha = m_editSenha->text();
+    // Login digitado
+    QString login = m_editLogin->text().trimmed();
+    const QString senhaDigitada = m_editSenha->text();
 
-    if (login.isEmpty() || senha.isEmpty()) {
+    if (login.isEmpty() || senhaDigitada.isEmpty()) {
         m_labelStatus->setText("Preencha login e senha.");
         return;
     }
 
-    // 1) ADMIN: login "admin" / senha "admin123"
-    if (login == "admin" && senha == "admin123") {
-        m_isAdmin = true;
+    // 1) ADMIN
+    if (login == "admin" && senhaDigitada == "admin123") {
+        m_isAdmin     = true;
+        m_cpfLogado   = {};
+        m_nomeLogado  = {};
+        m_cursoLogado = {};
         accept();
         return;
     }
 
-    // login = CPF que está em avaliadores.csv, senha fixa "123456"
+    // 2) AVALIADOR (login = CPF)
+    // se quiser aceitar com/sem máscara, normaliza:
+    // login.remove(QRegularExpression("\\D"));
+
     QFile f("avaliadores.csv");
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         m_labelStatus->setText("Não foi possível abrir 'avaliadores.csv'. Tente como admin.");
@@ -96,24 +104,45 @@ void DialogoLogin::tentarLogin()
     in.setCodec("UTF-8");
 #endif
 
+    bool encontrado = false;
+
+    // Formato real:
+    // 0:id ; 1:nome ; 2:email ; 3:cpf ; 4:cat+curso ; 5:senha ; 6:status ; 7:...
     while (!in.atEnd()) {
         const QString line = in.readLine();
         if (line.trimmed().isEmpty()) continue;
 
         const QStringList cols = line.split(';');
-        if (cols.size() < 4) continue; // id;nome;email;cpf;...
+        if (cols.size() < 6) continue;
 
-        const QString cpf = cols[3].trimmed();
-        if (cpf == login) {
-            if (senha != "123456") {
-                m_labelStatus->setText("Senha de avaliador inválida (use 123456).");
+        QString cpfArquivo = cols[3].trimmed();
+        // se quiser aceitar CPF com máscara, descomenta:
+        // cpfArquivo.remove(QRegularExpression("\\D"));
+        // login.remove(QRegularExpression("\\D"));
+
+        if (cpfArquivo == login) {
+            encontrado = true;
+
+            const QString senhaArquivo = cols[5].trimmed();   // SENHA = col F
+            if (senhaArquivo != senhaDigitada) {
+                m_labelStatus->setText("Senha inválida para este avaliador.");
                 return;
             }
-            m_isAdmin = false;
+
+            m_isAdmin     = false;
+            m_cpfLogado   = cpfArquivo;
+            m_nomeLogado  = cols[1].trimmed();  // Nome
+            m_cursoLogado = cols[4].trimmed();  // "Graduação - Engenharia de Software"
+
             accept();
             return;
         }
     }
 
-    m_labelStatus->setText("Usuário não encontrado.");
+    if (!encontrado) {
+        m_labelStatus->setText("Avaliador não encontrado para esse CPF.");
+    }
 }
+
+
+

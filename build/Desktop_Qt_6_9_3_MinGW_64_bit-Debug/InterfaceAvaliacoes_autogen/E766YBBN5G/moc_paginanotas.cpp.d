@@ -1,6 +1,7 @@
-C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_paginanotas.cpp: C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h \
+C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_paginanotas.cpp: C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginanotas.h \
   C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/moc_predefs.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/QString \
+  C:/Qt/6.9.3/mingw_64/include/QtCore/QVector \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q17memory.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q20iterator.h \
@@ -123,6 +124,7 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_b
   C:/Qt/6.9.3/mingw_64/include/QtCore/qutf8stringview.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/qvariant.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/qvarlengtharray.h \
+  C:/Qt/6.9.3/mingw_64/include/QtCore/qvector.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/qversiontagging.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/qxptype_traits.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/qyieldcpu.h \

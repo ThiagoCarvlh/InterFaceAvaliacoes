@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Usuario/Documents/InterfaceAvaliacoes
+# Install script for directory: C:/Users/Usuario/Documents/Estrutura de Dados/InterfaceAvaliacoes
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

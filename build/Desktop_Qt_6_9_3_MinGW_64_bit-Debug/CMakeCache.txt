@@ -301,7 +301,7 @@ InterfaceAvaliacoes_BINARY_DIR:STATIC=C:/Users/Usuario/Documents/InterfaceAvalia
 InterfaceAvaliacoes_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-InterfaceAvaliacoes_SOURCE_DIR:STATIC=C:/Users/Usuario/Documents/InterfaceAvaliacoes
+InterfaceAvaliacoes_SOURCE_DIR:STATIC=C:/Users/Usuario/Documents/Estrutura de Dados/InterfaceAvaliacoes
 
 //Additional directories where find(Qt6 ...) host Qt components
 // are searched
@@ -457,7 +457,7 @@ CMAKE_GENERATOR_TOOLSET:INTERNAL=
 CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/Usuario/Documents/InterfaceAvaliacoes
+CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/Usuario/Documents/Estrutura de Dados/InterfaceAvaliacoes
 //ADVANCED property for variable: CMAKE_INSTALL_BINDIR
 CMAKE_INSTALL_BINDIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_INSTALL_DATADIR

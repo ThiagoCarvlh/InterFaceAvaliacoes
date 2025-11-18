@@ -1,0 +1,1 @@
+1;Projetos;N/A;2025;Engenharia de Software;Graduação - Engenharia de Software;0;5;1;1;0;0;;1;A;Estrutura do código;1;Código;0;1;5

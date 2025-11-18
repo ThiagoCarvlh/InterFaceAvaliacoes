@@ -1,5 +1,6 @@
 #include "paginanotas.h"
 #include "ui_paginanotas.h"
+#include "dialogoavaliacaoficha.h"
 
 #include <QTableView>
 #include <QStandardItemModel>
@@ -18,6 +19,14 @@
 #include <QList>
 #include <QStringList>
 #include <QFileDialog>
+#include <QRegularExpression>
+
+// ================== HELPER: Normalizar CPF ==================
+static QString normalizarCpf(const QString& cpf) {
+    QString s = cpf;
+    s.remove(QRegularExpression("\\D")); // remove tudo que não é dígito
+    return s;
+}
 
 // ================== HELPERS INTERNOS (PROJETOS/VÍNCULOS) ==================
 
@@ -31,8 +40,8 @@ struct ProjetoResumo {
     int     idFicha{0};
 };
 
-// projetos.txt
-// ID;Nome;Descricao;Responsavel;Categoria;Status;Ficha;IdFicha
+// Carrega projetos do arquivo projetos.txt
+// Formato: ID;Nome;Descricao;Responsavel;Categoria;Status;Ficha;IdFicha
 QMap<int, ProjetoResumo> carregarProjetos(const QString& caminho)
 {
     QMap<int, ProjetoResumo> mapa;
@@ -56,7 +65,7 @@ QMap<int, ProjetoResumo> carregarProjetos(const QString& caminho)
         ProjetoResumo p;
         p.id        = cols[0].toInt();
         p.nome      = cols[1].trimmed();
-        p.categoria = cols[4].trimmed(); // Área/Categoria (Técnico/Graduação + Curso)
+        p.categoria = cols[4].trimmed();
         p.status    = cols[5].trimmed();
         p.idFicha   = cols[7].toInt();
 
@@ -66,8 +75,8 @@ QMap<int, ProjetoResumo> carregarProjetos(const QString& caminho)
     return mapa;
 }
 
-// vinculos_projetos.csv
-// idProjeto;cpfAvaliador
+// Carrega os projetos vinculados a um avaliador específico
+// Formato do vinculos_projetos.csv: idProjeto;cpfAvaliador
 QList<int> carregarProjetosDoAvaliador(const QString& caminhoVinculos,
                                        const QString& cpf)
 {
@@ -76,6 +85,9 @@ QList<int> carregarProjetosDoAvaliador(const QString& caminhoVinculos,
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return lista;
     }
+
+    // Normaliza o CPF do avaliador logado
+    QString cpfNormalizado = normalizarCpf(cpf);
 
     QTextStream in(&f);
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
@@ -90,9 +102,10 @@ QList<int> carregarProjetosDoAvaliador(const QString& caminhoVinculos,
         if (cols.size() < 2) continue;
 
         const int idProj = cols[0].toInt();
-        const QString cpfAval = cols[1].trimmed();
+        const QString cpfAval = normalizarCpf(cols[1].trimmed());
 
-        if (cpfAval == cpf && idProj > 0) {
+        // Compara CPFs normalizados
+        if (cpfAval == cpfNormalizado && idProj > 0) {
             if (!lista.contains(idProj))
                 lista.append(idProj);
         }
@@ -110,11 +123,11 @@ PaginaNotas::PaginaNotas(QWidget* parent)
     , ui(new Ui::PaginaNotas)
     , m_table(new QTableView(this))
     , m_model(new QStandardItemModel(this))
-    , m_btnNovo(new QPushButton(" Nova Nota", this))
-    , m_btnEditar(new QPushButton(" Editar", this))
-    , m_btnRemover(new QPushButton(" Remover", this))
-    , m_btnRecarregar(new QPushButton(" Recarregar", this))
-    , m_btnExportCsv(new QPushButton(" Exportar CSV", this)) // ✅ novo botão
+    , m_btnNovo(new QPushButton("📝 Nova Nota", this))
+    , m_btnEditar(new QPushButton("✏️ Editar", this))
+    , m_btnRemover(new QPushButton("🗑️ Remover", this))
+    , m_btnRecarregar(new QPushButton("🔄 Recarregar", this))
+    , m_btnExportCsv(new QPushButton("📊 Exportar CSV", this))
     , m_labelTotal(new QLabel(this))
 {
     ui->setupUi(this);
@@ -139,7 +152,6 @@ void PaginaNotas::configurarUi()
 {
     this->setObjectName("paginanotas");
 
-    // Estilo baseado na PaginaFichas
     this->setStyleSheet(R"(
         QWidget#paginanotas {
            background-color: #05070d;
@@ -258,7 +270,7 @@ void PaginaNotas::configurarUi()
 
     m_btnRemover->setObjectName("btnDanger");
     m_btnRecarregar->setObjectName("btnSecondary");
-    m_btnExportCsv->setObjectName("btnSecondary"); // ✅
+    m_btnExportCsv->setObjectName("btnSecondary");
     m_labelTotal->setObjectName("labelTotalNotas");
 
     auto* root = ui->verticalLayout;
@@ -267,7 +279,7 @@ void PaginaNotas::configurarUi()
 
     // Header
     auto* headerLayout = new QHBoxLayout();
-    auto* titulo = new QLabel(" Notas e Avaliações", this);
+    auto* titulo = new QLabel("📊 Notas e Avaliações", this);
     titulo->setObjectName("titulo");
 
     headerLayout->addWidget(titulo);
@@ -285,7 +297,7 @@ void PaginaNotas::configurarUi()
     btnLayoutBottom->addWidget(m_btnEditar);
     btnLayoutBottom->addWidget(m_btnRemover);
     btnLayoutBottom->addStretch();
-    btnLayoutBottom->addWidget(m_btnExportCsv); // ✅ botão na direita
+    btnLayoutBottom->addWidget(m_btnExportCsv);
     root->addLayout(btnLayoutBottom);
 
     // Rodapé
@@ -314,7 +326,7 @@ void PaginaNotas::configurarUi()
     connect(m_btnEditar,     &QPushButton::clicked, this, &PaginaNotas::onEditar);
     connect(m_btnRemover,    &QPushButton::clicked, this, &PaginaNotas::onRemover);
     connect(m_btnRecarregar, &QPushButton::clicked, this, &PaginaNotas::onRecarregar);
-    connect(m_btnExportCsv,  &QPushButton::clicked, this, &PaginaNotas::onExportCsv); // ✅
+    connect(m_btnExportCsv,  &QPushButton::clicked, this, &PaginaNotas::onExportCsv);
 }
 
 void PaginaNotas::configurarTabelaAdmin()
@@ -334,9 +346,9 @@ void PaginaNotas::configurarTabelaAdmin()
     header->setSectionResizeMode(4, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(5, QHeaderView::ResizeToContents);
 
-    m_btnNovo->setText(" Nova Nota");
+    m_btnNovo->setText("📝 Nova Nota");
     m_btnEditar->setVisible(true);
-    m_btnRemover->setText(" Remover");
+    m_btnRemover->setText("🗑️ Remover");
 }
 
 void PaginaNotas::configurarTabelaAvaliador()
@@ -355,9 +367,9 @@ void PaginaNotas::configurarTabelaAvaliador()
     header->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     header->setSectionResizeMode(4, QHeaderView::ResizeToContents);
 
-    m_btnNovo->setText(" Avaliar / Editar");
+    m_btnNovo->setText("📝 Avaliar / Editar");
     m_btnEditar->setVisible(false);
-    m_btnRemover->setText(" Remover Minha Nota");
+    m_btnRemover->setText("🗑️ Remover Minha Nota");
 }
 
 void PaginaNotas::atualizarTotalLabel(int total)
@@ -381,7 +393,7 @@ void PaginaNotas::setAvaliador(const QString& cpf,
                                const QString& nome,
                                const QString& curso)
 {
-    m_cpfLogado   = cpf;
+    m_cpfLogado   = normalizarCpf(cpf);  // ✅ NORMALIZA AO SETAR
     m_nomeLogado  = nome;
     m_cursoLogado = curso;
 
@@ -404,7 +416,7 @@ bool PaginaNotas::carregarNotasDoArquivo()
 
     QFile f(m_arquivoNotas);
     if (!f.exists()) {
-        return true; // ainda não há notas
+        return true;
     }
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -424,15 +436,15 @@ bool PaginaNotas::carregarNotasDoArquivo()
         if (line.trimmed().isEmpty()) continue;
 
         const QStringList p = line.split(';');
-        if (p.size() < 5) continue; // id, projeto, cpf, nome, nota [, idFicha]
+        if (p.size() < 5) continue;
 
         Nota n;
         n.idNota        = p[0].toInt();
         n.idProjeto     = p[1].toInt();
-        n.cpfAvaliador  = p[2].trimmed();
+        n.cpfAvaliador  = normalizarCpf(p[2].trimmed());  // ✅ NORMALIZA AO CARREGAR
         n.nomeAvaliador = p[3].trimmed();
         n.notaFinal     = p[4].toDouble();
-        n.idFicha       = (p.size() >= 6) ? p[5].toInt() : 0; // compatível com arquivos antigos
+        n.idFicha       = (p.size() >= 6) ? p[5].toInt() : 0;
 
         m_notas.append(n);
         if (n.idNota > maxId) maxId = n.idNota;
@@ -459,10 +471,10 @@ bool PaginaNotas::salvarNotasNoArquivo() const
     for (const Nota& n : m_notas) {
         out << n.idNota << ";"
             << n.idProjeto << ";"
-            << n.cpfAvaliador << ";"
+            << n.cpfAvaliador << ";"  // já está normalizado
             << n.nomeAvaliador << ";"
             << n.notaFinal << ";"
-            << n.idFicha << "\n";   // ✅ grava idFicha também
+            << n.idFicha << "\n";
     }
 
     return true;
@@ -509,7 +521,6 @@ void PaginaNotas::preencherTabelaAdmin()
         row << new QStandardItem(n.nomeAvaliador);
         row << new QStandardItem(QString::number(n.notaFinal, 'f', 2));
 
-        // ID Nota não editável
         row[0]->setEditable(false);
 
         m_model->appendRow(row);
@@ -518,24 +529,41 @@ void PaginaNotas::preencherTabelaAdmin()
 
 void PaginaNotas::preencherTabelaAvaliador()
 {
+    m_model->removeRows(0, m_model->rowCount());
+
     if (m_cpfLogado.isEmpty())
         return;
 
-    QMap<int, ProjetoResumo> projetos = carregarProjetos(m_arquivoProjetos);
-    QList<int> projetosAvaliador = carregarProjetosDoAvaliador(m_arquivoVinculos, m_cpfLogado);
+    // ✅ Carrega projetos vinculados ao avaliador
+    QList<int> projetosAvaliador =
+        carregarProjetosDoAvaliador(m_arquivoVinculos, m_cpfLogado);
 
-    for (int idProj : projetosAvaliador) {
+    // Carrega os projetos completos
+    QMap<int, ProjetoResumo> projetos =
+        carregarProjetos(m_arquivoProjetos);
+
+    // Cria mapa de notas já lançadas
+    QMap<int, double> notasPorProjeto;
+    for (const Nota& n : m_notas) {
+        if (n.cpfAvaliador == m_cpfLogado) {
+            notasPorProjeto[n.idProjeto] = n.notaFinal;
+        }
+    }
+
+    // Monta tabela
+    for (int idProj : projetosAvaliador)
+    {
         if (!projetos.contains(idProj))
             continue;
 
         const ProjetoResumo& p = projetos[idProj];
 
-        Nota* nota = encontrarNotaDoAvaliador(idProj, m_cpfLogado);
+        double nota = notasPorProjeto.value(idProj, -1);
 
-        const QString situacao = nota ? "Avaliado" : "Não avaliado";
-        const QString notaStr  = nota
-                                    ? QString::number(nota->notaFinal, 'f', 2)
-                                    : QString("—");
+        QString situacao = (nota >= 0) ? "✅ Avaliado" : "⏳ Não avaliado";
+        QString notaStr = (nota >= 0)
+                              ? QString::number(nota, 'f', 2)
+                              : "—";
 
         QList<QStandardItem*> row;
         row << new QStandardItem(QString::number(p.id));
@@ -548,6 +576,8 @@ void PaginaNotas::preencherTabelaAvaliador()
 
         m_model->appendRow(row);
     }
+
+    m_table->resizeColumnsToContents();
 }
 
 // ================== HELPERS ==================
@@ -569,11 +599,66 @@ PaginaNotas::Nota* PaginaNotas::encontrarNotaPorId(int idNota)
 
 PaginaNotas::Nota* PaginaNotas::encontrarNotaDoAvaliador(int idProjeto, const QString& cpf)
 {
+    QString cpfNorm = normalizarCpf(cpf);
     for (Nota& n : m_notas) {
-        if (n.idProjeto == idProjeto && n.cpfAvaliador == cpf)
+        if (n.idProjeto == idProjeto && n.cpfAvaliador == cpfNorm)
             return &n;
     }
     return nullptr;
+}
+
+void PaginaNotas::removerAvaliacoesDoArquivo(int idNota, int idProjeto, const QString& cpf)
+{
+    QFile f(m_arquivoAvaliacoes);
+    if (!f.exists())
+        return;
+
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QTextStream in(&f);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+    in.setCodec("UTF-8");
+#endif
+
+    QVector<QString> linhas;
+    QString cpfNorm = normalizarCpf(cpf);
+
+    while (!in.atEnd()) {
+        const QString line = in.readLine();
+        if (line.trimmed().isEmpty()) continue;
+
+        const QStringList p = line.split(';');
+        if (p.size() < 6) {
+            linhas.append(line);
+            continue;
+        }
+
+        int     idNotaLinha = p[0].toInt();
+        int     idProjLinha = p[1].toInt();
+        QString cpfLinha    = normalizarCpf(p[2].trimmed());
+
+        if (idNotaLinha == idNota &&
+            idProjLinha == idProjeto &&
+            cpfLinha     == cpfNorm) {
+            continue;
+        }
+
+        linhas.append(line);
+    }
+
+    f.close();
+
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+        return;
+
+    QTextStream out(&f);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+    out.setCodec("UTF-8");
+#endif
+
+    for (const QString& l : linhas)
+        out << l << '\n';
 }
 
 // ================== SLOTS (CRUD) ==================
@@ -589,43 +674,76 @@ void PaginaNotas::onNovo()
         }
 
         const int idProj = m_model->item(r, 0)->text().toInt();
-        Nota* nota = encontrarNotaDoAvaliador(idProj, m_cpfLogado);
 
-        bool ok = false;
-        double valorInicial = nota ? nota->notaFinal : 7.0;
-
-        double novaNota = QInputDialog::getDouble(
-            this,
-            "Avaliar Projeto",
-            "Nota final (0–10):",
-            valorInicial,
-            0.0, 10.0, 2,
-            &ok
-            );
-        if (!ok) return;
-
-        // ✅ carrega o idFicha a partir do projeto
+        // Carrega projeto
         QMap<int, ProjetoResumo> projetos = carregarProjetos(m_arquivoProjetos);
-        const int idFicha = projetos.value(idProj).idFicha;
+        if (!projetos.contains(idProj)) {
+            QMessageBox::warning(this, "Projetos",
+                                 "Projeto não encontrado no arquivo de projetos.");
+            return;
+        }
 
-        if (!nota) {
+        const ProjetoResumo& p = projetos[idProj];
+
+        if (p.idFicha <= 0) {
+            QMessageBox::warning(this, "Ficha",
+                                 "Este projeto não possui ficha associada.\n\n"
+                                 "Peça ao administrador para definir uma ficha para este projeto.");
+            return;
+        }
+
+        // Verifica se já existe nota
+        Nota* notaExistente = encontrarNotaDoAvaliador(idProj, m_cpfLogado);
+
+        int idNota = 0;
+        if (notaExistente) {
+            idNota = notaExistente->idNota;
+        } else {
+            idNota = m_nextId;
+        }
+
+        // ✅ ABRE O DIÁLOGO DE AVALIAÇÃO
+        DialogoAvaliacaoFicha dlg(
+            idProj,
+            p.idFicha,
+            p.nome,
+            m_cpfLogado,
+            m_nomeLogado,
+            idNota,
+            this
+            );
+
+        if (dlg.exec() != QDialog::Accepted)
+            return;
+
+        double notaFinal = dlg.notaFinal();
+
+        if (!notaExistente) {
+            // Cria nova nota
             Nota n;
-            n.idNota        = m_nextId++;
+            n.idNota        = idNota;
             n.idProjeto     = idProj;
-            n.idFicha       = idFicha;          // ✅ liga nota ↔ ficha
+            n.idFicha       = p.idFicha;
             n.cpfAvaliador  = m_cpfLogado;
             n.nomeAvaliador = m_nomeLogado;
-            n.notaFinal     = novaNota;
+            n.notaFinal     = notaFinal;
+
             m_notas.append(n);
+            if (idNota >= m_nextId)
+                m_nextId = idNota + 1;
         } else {
-            nota->notaFinal = novaNota;
-            nota->idFicha   = idFicha;         // ✅ garante consistência
+            // Atualiza nota existente
+            notaExistente->notaFinal = notaFinal;
+            notaExistente->idFicha   = p.idFicha;
         }
 
         salvarNotasNoArquivo();
         recarregarDados();
+
+        QMessageBox::information(this, "Sucesso",
+                                 "Avaliação salva com sucesso!");
     } else {
-        // MODO ADMIN: cria nota manual
+        // MODO ADMIN: criação manual
         bool ok = false;
 
         int idProj = QInputDialog::getInt(
@@ -652,15 +770,14 @@ void PaginaNotas::onNovo()
             );
         if (!ok) return;
 
-        // ✅ busca ficha do projeto
         QMap<int, ProjetoResumo> projetos = carregarProjetos(m_arquivoProjetos);
         const int idFicha = projetos.value(idProj).idFicha;
 
         Nota n;
         n.idNota        = m_nextId++;
         n.idProjeto     = idProj;
-        n.idFicha       = idFicha;              // ✅ também no modo admin
-        n.cpfAvaliador  = cpf.trimmed();
+        n.idFicha       = idFicha;
+        n.cpfAvaliador  = normalizarCpf(cpf);
         n.nomeAvaliador = nome.trimmed();
         n.notaFinal     = valor;
 
@@ -672,12 +789,13 @@ void PaginaNotas::onNovo()
 
 void PaginaNotas::onEditar()
 {
+    // Modo avaliador: editar = mesma lógica de avaliar
     if (m_modoAvaliador) {
-        // No modo avaliador, editar = mesma lógica do Avaliar
         onNovo();
         return;
     }
 
+    // MODO ADMIN
     const int r = selectedRow();
     if (r < 0) {
         QMessageBox::information(this, "Editar Nota",
@@ -716,12 +834,13 @@ void PaginaNotas::onEditar()
         );
     if (!ok) return;
 
+    // Atualiza a nota em memória
     nota->idProjeto     = idProj;
-    nota->cpfAvaliador  = cpf.trimmed();
+    nota->cpfAvaliador  = normalizarCpf(cpf);   // mantém CPF normalizado
     nota->nomeAvaliador = nome.trimmed();
     nota->notaFinal     = valor;
 
-    // ✅ mantém idFicha em sincronia com o projeto
+    // Mantém idFicha em sincronia com o projeto
     QMap<int, ProjetoResumo> projetos = carregarProjetos(m_arquivoProjetos);
     nota->idFicha = projetos.value(idProj).idFicha;
 
@@ -733,14 +852,17 @@ void PaginaNotas::onRemover()
 {
     const int r = selectedRow();
     if (r < 0) {
-        QMessageBox::information(this, "Remover",
-                                 m_modoAvaliador
-                                     ? "Selecione um projeto para remover sua nota."
-                                     : "Selecione uma nota para remover.");
+        QMessageBox::information(
+            this, "Remover",
+            m_modoAvaliador
+                ? "Selecione um projeto para remover sua nota."
+                : "Selecione uma nota para remover."
+            );
         return;
     }
 
     if (m_modoAvaliador) {
+        // MODO AVALIADOR: remove apenas a SUA nota daquele projeto
         const int idProj = m_model->item(r, 0)->text().toInt();
 
         int idx = -1;
@@ -758,15 +880,23 @@ void PaginaNotas::onRemover()
             return;
         }
 
+        const Nota n = m_notas[idx];
+
         if (QMessageBox::question(this, "Remover Nota",
                                   "Remover sua nota para este projeto?")
             != QMessageBox::Yes)
             return;
 
+        // Remove da memória
         m_notas.remove(idx);
         salvarNotasNoArquivo();
+
+        // Remove também as avaliações detalhadas (quesitos)
+        removerAvaliacoesDoArquivo(n.idNota, n.idProjeto, n.cpfAvaliador);
+
         recarregarDados();
     } else {
+        // MODO ADMIN: remove qualquer nota
         const int idNota = m_model->item(r, 0)->text().toInt();
 
         int idx = -1;
@@ -779,6 +909,8 @@ void PaginaNotas::onRemover()
 
         if (idx < 0) return;
 
+        const Nota n = m_notas[idx];
+
         if (QMessageBox::question(this, "Remover Nota",
                                   "Remover nota selecionada?")
             != QMessageBox::Yes)
@@ -786,17 +918,21 @@ void PaginaNotas::onRemover()
 
         m_notas.remove(idx);
         salvarNotasNoArquivo();
+
+        removerAvaliacoesDoArquivo(n.idNota, n.idProjeto, n.cpfAvaliador);
+
         recarregarDados();
     }
 }
 
 void PaginaNotas::onRecarregar()
 {
-    carregarNotasDoArquivo();
+    // Recarrega notas do arquivo e reconstrói a tabela
+    if (!carregarNotasDoArquivo())
+        return;
+
     recarregarDados();
 }
-
-// ================== EXPORTAR CSV ==================
 
 void PaginaNotas::onExportCsv()
 {
@@ -822,21 +958,24 @@ void PaginaNotas::onExportCsv()
     out.setCodec("UTF-8");
 #endif
 
-    // ✅ carrega resumo dos projetos para enriquecer o CSV
+    // Carrega resumo dos projetos para enriquecer o CSV
     QMap<int, ProjetoResumo> projetos = carregarProjetos(m_arquivoProjetos);
 
-    // Cabeçalho amigável para a banca
+    // Cabeçalho
     out << "IdNota;IdProjeto;Projeto;CategoriaProjeto;StatusProjeto;"
            "IdFicha;CpfAvaliador;NomeAvaliador;NotaFinal\n";
 
     for (const Nota& n : m_notas) {
         const ProjetoResumo p = projetos.value(n.idProjeto);
 
-        QString nomeProj = (p.id > 0) ? p.nome : QString("ID %1 (não encontrado)").arg(n.idProjeto);
-        QString categ    = p.categoria;
-        QString status   = p.status;
+        QString nomeProj = (p.id > 0)
+                               ? p.nome
+                               : QString("ID %1 (não encontrado)").arg(n.idProjeto);
+        QString categ  = p.categoria;
+        QString status = p.status;
 
-        // Se a nota ainda estiver sem idFicha (arquivo antigo), cai no idFicha do projeto
+        // Se a nota ainda estiver sem idFicha (compatível com arquivo antigo),
+        // usa o idFicha do projeto
         int idFichaExport = (n.idFicha > 0) ? n.idFicha : p.idFicha;
 
         // Evita quebrar o CSV com ';' dentro dos textos
@@ -848,15 +987,15 @@ void PaginaNotas::onExportCsv()
         QString nomeAval = n.nomeAvaliador;
         nomeAval.replace(';', ',');
 
-        out << n.idNota        << ';'
-            << n.idProjeto     << ';'
-            << nomeProj        << ';'
-            << categ           << ';'
-            << status          << ';'
-            << idFichaExport   << ';'
-            << cpf             << ';'
-            << nomeAval        << ';'
-            << n.notaFinal     << '\n';
+        out << n.idNota      << ';'
+            << n.idProjeto   << ';'
+            << nomeProj      << ';'
+            << categ         << ';'
+            << status        << ';'
+            << idFichaExport << ';'
+            << cpf           << ';'
+            << nomeAval      << ';'
+            << n.notaFinal   << '\n';
     }
 
     QMessageBox::information(this, "Exportar CSV",

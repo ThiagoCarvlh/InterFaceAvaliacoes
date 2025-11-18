@@ -1,4 +1,4 @@
-C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_dialogovincularavaliadores.cpp: C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h \
+C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_dialogovincularavaliadores.cpp: C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h \
   C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/moc_predefs.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/QString \
   C:/Qt/6.9.3/mingw_64/include/QtCore/QVector \
@@ -374,4 +374,4 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_b
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-  C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h
+  C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/vinculos.h

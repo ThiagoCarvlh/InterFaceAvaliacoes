@@ -1,5 +1,6 @@
-C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_dialogologin.cpp: C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h \
+C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/E766YBBN5G/moc_dialogologin.cpp: C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogologin.h \
   C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/moc_predefs.h \
+  C:/Qt/6.9.3/mingw_64/include/QtCore/QString \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q17memory.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.9.3/mingw_64/include/QtCore/q20iterator.h \

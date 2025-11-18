@@ -598,37 +598,39 @@ InterfaceAvaliacoes_autogen/timestamp: \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/CMakeLists.txt \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/CMakeLists.txt \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/main.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/resources.qrc \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogologin.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogologin.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/janelaprincipal.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/janelaprincipal.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaavaliadores.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaavaliadores.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginafichas.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginafichas.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginanotas.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginanotas.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaprojetos.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaprojetos.h \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/vinculos.cpp \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/vinculos.h \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
 	C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/InterfaceAvaliacoes_autogen/moc_predefs.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/main.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/resources.qrc \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.cpp \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.ui \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.ui \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.ui \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.ui \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.ui \
-	C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/dialogologin.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/janelaprincipal.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaavaliadores.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginafichas.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginanotas.ui \
+	C:/Users/Usuario/Documents/Estrutura\ de\ Dados/InterfaceAvaliacoes/ui/telas/paginaprojetos.ui \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ui/telas/vinculos.h ui/telas/vinculos.cpp
         ui/telas/dialogovincularavaliadores.h ui/telas/dialogovincularavaliadores.cpp
         ui/telas/dialogoselecionarficha.h ui/telas/dialogoselecionarficha.cpp
+        ui/telas/dialogoavaliacaoficha.h ui/telas/dialogoavaliacaoficha.cpp
 
     )
 else()

@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../../../ui/telas/dialogologin.h"
+#include "../../../../../Estrutura de Dados/InterfaceAvaliacoes/ui/telas/dialogologin.h"
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>

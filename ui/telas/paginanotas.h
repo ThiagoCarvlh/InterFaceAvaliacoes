@@ -27,7 +27,7 @@ private slots:
     void onEditar();
     void onRemover();
     void onRecarregar();
-    void onExportCsv();   // ✅ novo slot para exportar CSV
+    void onExportCsv();   // exportar CSV resumo de notas
 
 private:
     Ui::PaginaNotas*    ui{};
@@ -37,7 +37,7 @@ private:
         *m_btnEditar{},
         *m_btnRemover{},
         *m_btnRecarregar{},
-        *m_btnExportCsv{};  // ✅ novo botão
+        *m_btnExportCsv{};
     QLabel*             m_labelTotal{};
 
     // Contexto do usuário logado
@@ -50,7 +50,7 @@ private:
     struct Nota {
         int     idNota{0};
         int     idProjeto{0};
-        int     idFicha{0};      // ✅ vínculo com a ficha
+        int     idFicha{0};      // vínculo com a ficha
         QString cpfAvaliador;
         QString nomeAvaliador;
         double  notaFinal{0.0};
@@ -59,9 +59,10 @@ private:
     QVector<Nota> m_notas;
     int           m_nextId{1};
 
-    const QString m_arquivoNotas    = "notas.csv";
-    const QString m_arquivoProjetos = "projetos.txt";
-    const QString m_arquivoVinculos = "vinculos_projetos.csv";
+    const QString m_arquivoNotas      = "notas.csv";
+    const QString m_arquivoProjetos   = "projetos.txt";
+    const QString m_arquivoVinculos   = "vinculos_projetos.csv";
+    const QString m_arquivoAvaliacoes = "avaliacoes.csv";
 
     // Configuração de UI/estilo
     void configurarUi();
@@ -83,4 +84,5 @@ private:
     int  selectedRow() const;
     Nota* encontrarNotaPorId(int idNota);
     Nota* encontrarNotaDoAvaliador(int idProjeto, const QString& cpf);
+    void removerAvaliacoesDoArquivo(int idNota, int idProjeto, const QString& cpf);
 };

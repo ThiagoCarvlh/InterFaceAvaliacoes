@@ -87,17 +87,30 @@ void JanelaPrincipal::irNotas()
     trocarPagina(m_pagNotas);
 }
 
-void JanelaPrincipal::configurarPorLogin(bool admin)
+void JanelaPrincipal::configurarPorLogin(bool admin,
+                                         const QString& cpf,
+                                         const QString& nome,
+                                         const QString& curso)
 {
     m_admin = admin;
 
     // Admin vê tudo; avaliador não vê Projetos/Avaliadores
     if (m_actProjetos)    m_actProjetos->setVisible(admin);
     if (m_actAvaliadores) m_actAvaliadores->setVisible(admin);
+    if (m_actFichas)      m_actFichas->setVisible(true);
+    if (m_actNotas)       m_actNotas->setVisible(true);
 
-    // Fichas e Notas sempre visíveis
-    if (admin)
-        irProjetos();
-    else
+    if (!admin) {
+        // MODO AVALIADOR: restringir visão e informar contexto à PaginaNotas
+        if (m_pagNotas) {
+            m_pagNotas->setAvaliador(cpf, nome, curso);
+        }
         irNotas();
+    } else {
+        // MODO ADMIN: PaginaNotas em modo administrativo (sem avaliador)
+        if (m_pagNotas) {
+            m_pagNotas->setAvaliador(QString(), QString(), QString());
+        }
+        irProjetos();
+    }
 }

@@ -23,8 +23,12 @@ public:
     explicit JanelaPrincipal(QWidget *parent = nullptr);
     ~JanelaPrincipal();
 
-    // true = admin (vê tudo), false = avaliador (vê só Fichas/Notas)
-    void configurarPorLogin(bool admin);
+    // true = admin, false = avaliador
+    // cpf/nome/curso só são usados quando !admin
+    void configurarPorLogin(bool admin,
+                            const QString& cpf   = QString(),
+                            const QString& nome  = QString(),
+                            const QString& curso = QString());
 
 private slots:
     void irProjetos();
