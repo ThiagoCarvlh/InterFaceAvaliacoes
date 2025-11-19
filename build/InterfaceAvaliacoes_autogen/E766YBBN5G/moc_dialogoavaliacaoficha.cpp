@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../ui/telas/dialogoavaliacaoficha.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -39,12 +40,12 @@ template <> constexpr inline auto DialogoAvaliacaoFicha::qt_create_metaobjectdat
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "DialogoAvaliacaoFicha",
-        "onSalvar",
+        "onSalvarPdf",
         ""
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'onSalvar'
+        // Slot 'onSalvarPdf'
         QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
@@ -69,7 +70,7 @@ void DialogoAvaliacaoFicha::qt_static_metacall(QObject *_o, QMetaObject::Call _c
     auto *_t = static_cast<DialogoAvaliacaoFicha *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->onSalvar(); break;
+        case 0: _t->onSalvarPdf(); break;
         default: ;
         }
     }

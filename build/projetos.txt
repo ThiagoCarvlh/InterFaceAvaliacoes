@@ -1,1 +1,6 @@
-1;AvaliaEncoeng;Automatizar Notas de Avaliadores de Projetos;Hanna Nunes Reis;Graduação - Engenharia de Software;Aguardando Avaliadores;Projetos - Res. N/A/2025 - Engenharia de Software;1
+1;AvaliaEncoeng;Automatizar Notas de Avaliadores de Projetos;Hanna Nunes Reis;Graduação - Engenharia de Software;Cadastrado;Projetos - Res. N/A/2025 - Engenharia de Software;1
+2;Conecta Hakcthon;Automatização de Gerenciamento de Hakcthon;Higor Isau;Graduação - Engenharia de Software;Pronto para Avaliação;Projeto Estrutra de dados - Res. N/A/2025 - Engenharia de Software;1
+3;Projeto Credetia+;Sistema de Credenciamento e Gestão;Luan Palma;Graduação - Engenharia de Software;Pronto para Avaliação;Projeto Estrutra de dados - Res. N/A/2025 - Engenharia de Software;1
+4;Desafio do Robo;Automatização do torneio de robótica;Luís Rogerio;Graduação - Engenharia de Software;Pronto para Avaliação;Projeto Estrutra de dados - Res. N/A/2025 - Engenharia de Software;1
+5;AvaliadorEncoeng;Sistema de automatização trabalhos acadêmicos;Arielle E Silva Tavares;Graduação - Engenharia de Software;Pronto para Avaliação;Projetos - Res. N/A/2025 - Engenharia de Software;1
+6;GoEvent;Automarização Gerenciamento para Maratona;Paulo;Graduação - Engenharia de Software;Pronto para Avaliação;Projeto Estrutra de dados - Res. N/A/2025 - Engenharia de Software;1

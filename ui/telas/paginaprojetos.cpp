@@ -27,6 +27,7 @@
 #include "vinculos.h"
 #include "dialogoselecionarficha.h"
 #include "dialogovincularavaliadores.h"
+#include "dialogoavaliacaoficha.h"
 
 // ================== Filtro para busca + categoria (Projetos) ==================
 
@@ -588,6 +589,11 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
     auto* btnLayout = new QHBoxLayout();
     btnLayout->setSpacing(12);
     btnLayout->addWidget(m_btnEditar);
+
+    // botão Avaliar / Gerar PDF (local, não membro)
+    auto* btnAvaliar = new QPushButton(" Avaliar / Gerar PDF", this);
+    btnLayout->addWidget(btnAvaliar);
+
     btnLayout->addWidget(m_btnVincular);
     btnLayout->addWidget(m_btnDefinirFicha);
     btnLayout->addWidget(m_btnRemover);
@@ -632,6 +638,7 @@ PaginaProjetos::PaginaProjetos(QWidget* parent)
     // Botões
     connect(m_btnNovo,        &QPushButton::clicked, this, &PaginaProjetos::onNovo);
     connect(m_btnEditar,      &QPushButton::clicked, this, &PaginaProjetos::onEditar);
+    connect(btnAvaliar,       &QPushButton::clicked, this, &PaginaProjetos::onAvaliarProjeto);
     connect(m_btnRemover,     &QPushButton::clicked, this, &PaginaProjetos::onRemover);
     connect(m_btnRecarregar,  &QPushButton::clicked, this, &PaginaProjetos::onRecarregar);
     connect(m_btnExportCsv,   &QPushButton::clicked, this, &PaginaProjetos::onExportCsv);
@@ -894,6 +901,54 @@ void PaginaProjetos::onRemover() {
 void PaginaProjetos::onRecarregar() {
     carregarDoArquivo();
     atualizarTotal();
+}
+
+// ================== AVALIAR / GERAR PDF ==================
+
+void PaginaProjetos::onAvaliarProjeto()
+{
+    const int r = selectedRow();
+    if (r < 0) {
+        QMessageBox::warning(this, "Avaliação",
+                             "Selecione um projeto para avaliar.");
+        return;
+    }
+
+    bool okId = false;
+    const int idProjeto = m_model->item(r, 0)->text().toInt(&okId);
+    if (!okId) {
+        QMessageBox::warning(this, "Avaliação",
+                             "ID de projeto inválido.");
+        return;
+    }
+
+    const QString nomeProj    = m_model->item(r, 1)->text();
+    const QString responsavel = m_model->item(r, 3)->text();
+
+    // Usa a ficha já definida na tabela (colunas 6 e 7)
+    const QString idFichaStr = m_model->item(r, 7)->text();
+    bool okFicha = false;
+    const int idFicha = idFichaStr.toInt(&okFicha);
+
+    if (!okFicha || idFicha <= 0) {
+        QMessageBox::warning(this, "Avaliação",
+                             "Este projeto ainda não possui ficha definida.\n"
+                             "Use o botão \"Definir Ficha\" antes de avaliar.");
+        return;
+    }
+
+    const QString nomeFicha = m_model->item(r, 6)->text();
+
+    DialogoAvaliacaoFicha dlgAv(
+        idProjeto,
+        idFicha,
+        nomeProj,
+        responsavel,
+        nomeFicha,
+        this
+        );
+    dlgAv.setWindowTitle("Avaliar Projeto / Gerar PDF");
+    dlgAv.exec();
 }
 
 // ================== PERSISTÊNCIA (projetos.txt) ==================

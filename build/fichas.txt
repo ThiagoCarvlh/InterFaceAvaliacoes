@@ -1,1 +1,1 @@
-1;Projetos;N/A;2025;Engenharia de Software;Graduação - Engenharia de Software;0;5;1;1;0;0;;1;A;Estrutura do código;1;Código;0;1;5
+1;Projeto Estrutra de dados;N/A;2025;Engenharia de Software;Graduação - Engenharia de Software;0;8;1;1;1;1;Aprovado pelo paulo;1;1;Nota Principal;4;Apresentação;0;1;2;Interface;0;1;1;Requesitos Obrigatórios;0;0;1;Funcinalidade Extra;0;0;1

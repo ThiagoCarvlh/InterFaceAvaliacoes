@@ -34,6 +34,7 @@ private slots:
     void onExportCsv();
     void onBuscaChanged(const QString& texto);
     void onCategoriaChanged(int index);
+    void onAvaliarProjeto();
 
 private:
     // Métodos privados

@@ -50,7 +50,8 @@ template <> constexpr inline auto PaginaProjetos::qt_create_metaobjectdata<qt_me
         "onBuscaChanged",
         "texto",
         "onCategoriaChanged",
-        "index"
+        "index",
+        "onAvaliarProjeto"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -76,6 +77,8 @@ template <> constexpr inline auto PaginaProjetos::qt_create_metaobjectdata<qt_me
         QtMocHelpers::SlotData<void(int)>(11, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::Int, 12 },
         }}),
+        // Slot 'onAvaliarProjeto'
+        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -108,6 +111,7 @@ void PaginaProjetos::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 6: _t->onExportCsv(); break;
         case 7: _t->onBuscaChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 8: _t->onCategoriaChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 9: _t->onAvaliarProjeto(); break;
         default: ;
         }
     }
@@ -132,14 +136,14 @@ int PaginaProjetos::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 10)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 9;
+        _id -= 10;
     }
     return _id;
 }
