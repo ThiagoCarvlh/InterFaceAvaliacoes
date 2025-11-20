@@ -180,6 +180,12 @@ Sistema de arquivos simples e eficiente:
 
 ## Como Compilar e Executar
 
+## Atenção 
+- O login para entra no Sistema é :
+
+- **Login** : admin
+- **Senha** : admin123
+
 ### Pré-requisitos
 
 - **Qt Framework:** versão 5.15+ ou 6.x
