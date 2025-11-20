@@ -177,14 +177,14 @@ Sistema de arquivos simples e eficiente:
 - **QtPrintSupport:** geração de relatórios (opcional)
 
 ---
+### Atenção 
+O login para entrar no sistema é:
+
+- **Login:** admin  
+- **Senha:** admin123
+
 
 ## Como Compilar e Executar
-
-## Atenção 
-- O login para entra no Sistema é :
-
-- **Login** : admin
-- **Senha** : admin123
 
 ### Pré-requisitos
 
@@ -204,12 +204,12 @@ Sistema de arquivos simples e eficiente:
 
 #### 1. Clone o repositório
 ```bash
-git clone https://github.com/SEU_USUARIO/sistema-avaliacao-projetos.git
+git clone https://github.com/ThiagoCarvlh/AvaliaEncoeng.git
 ```
 
 #### 1.1 Encontre a pasta
 ```bash
-cd sistema-avaliacao-projetos
+cd AvaliaEncoeng
 ```
 
 #### 2. Compile com Qt Creator (Recomendado)
@@ -269,7 +269,7 @@ Para reportar bugs ou solicitar features, utilize as [Issues do GitHub](https://
 ---
 ## Equipe de Desenvolvimento do código 
 
-**Desenvolvedores fullstak:** 
+**Desenvolvedores fullstack:** 
 
 **Hanna Nunes Reis**                                                                               
 
@@ -278,7 +278,7 @@ Para reportar bugs ou solicitar features, utilize as [Issues do GitHub](https://
 
 **Thiago Carvalho** 
 
-**LinkedIn:** [Thiago Carvlh](https://www.linkedin.com/in/thiagocarvlh?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BEleO7%2B25TI2U%2BZx7184YHg%3D%3D")  
+**LinkedIn:** [Thiago Carvlh](https://www.linkedin.com/in/thiagocarvlh?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BEleO7%2B25TI2U%2BZx7184YHg%3D%3D)  
 **GitHub:** [Thiago Carvlh](https://github.com/ThiagoCarvlh)
 
 **Desenvolvedores backend e Design:**
@@ -307,7 +307,7 @@ Agradecimentos especiais aos professores orientadores e à instituição de ensi
 
 <div align="center">
 
-**[⬆ Voltar ao topo](#avaliaenconeng)**  
+**[⬆ Voltar ao topo](#avaliaencoeng)**  
 
 Feito com dedicação usando C++ e Qt
 
