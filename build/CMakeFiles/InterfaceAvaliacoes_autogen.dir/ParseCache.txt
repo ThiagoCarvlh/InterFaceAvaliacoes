@@ -373,8 +373,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/janelaprincipal.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/janelaprincipal.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -749,8 +749,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoselecionarficha.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/dialogoselecionarficha.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -1139,8 +1139,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/dialogoavaliacaoficha.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -1517,9 +1517,9 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliador
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogovincularavaliadores.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/dialogovincularavaliadores.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/vinculos.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -1894,8 +1894,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogologin.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/dialogologin.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -2269,8 +2269,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaavaliadores.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/paginaavaliadores.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -2646,8 +2646,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginanotas.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/paginanotas.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -3023,8 +3023,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginafichas.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/paginafichas.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.9.3/mingw_64/include/QtCore/QString
@@ -3398,8 +3398,8 @@ C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
- mdp:C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/paginaprojetos.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/build/InterfaceAvaliacoes_autogen/moc_predefs.h
+ mdp:C:/Users/Usuario/Documents/InterFaceAvaliacoes/ui/telas/paginaprojetos.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/vinculos.h
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/main.cpp
 C:/Users/Usuario/Documents/InterfaceAvaliacoes/ui/telas/dialogoavaliacaoficha.cpp
