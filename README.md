@@ -300,12 +300,6 @@ sistema-avaliacao.exe
 
 ---
 
-## Contato e Suporte
- 
-**Email:** thiagocarvlh2005@gmail.com 
-**LinkedIn:** [Thiago Carvlh](https://www.linkedin.com/in/thiagocarvlh?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BEleO7%2B25TI2U%2BZx7184YHg%3D%3D")  
-**GitHub:** [Thiago Carvlh](https://github.com/ThiagoCarvlh)
-
 Para reportar bugs ou solicitar features, utilize as [Issues do GitHub](https://github.com/SEU_USUARIO/sistema-avaliacao-projetos/issues).
 
 ---
